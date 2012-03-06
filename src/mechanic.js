@@ -85,9 +85,9 @@ var $ = (function() {
 			
 			// if we get here, we don't have a valid choice
 			return null;
-		}
-		
-	}
+		}	
+	};
+	
 	UIAElement.prototype.type = function() {
 		var type = this.toString().split(" ")[1];
 		return type.substr(0, type.length - 1);
@@ -131,26 +131,25 @@ var $ = (function() {
 		} else if (typeSelectorRE.test(selector)) {
 			found = element.getElementByType(selector);
 			return found ? [found] : emptyArray;
-			
 		} else {
 			return emptyArray;
 		}
-	}
+	};
 	
     function filtered(elements, selector) {
       return selector === undefined ? $(elements) : $(elements).filter(selector);
-    }
+    };
 	
     $.extend = function(target){
       slice.call(arguments, 1).forEach(function(source) {
         for (key in source) target[key] = source[key];
       });
       return target;
-    }
+    };
 	
     $.inArray = function(elem, array, i) {
   		return emptyArray.indexOf.call(array, elem, i);
-  	}
+  	};
 
     $.map = function(elements, callback) {
       var value, values = [], i, key;
@@ -165,7 +164,7 @@ var $ = (function() {
           if (value != null) values.push(value);
         }
       return flatten(values);
-    }
+    };
 
     $.each = function(elements, callback) {
       var i, key;
@@ -178,7 +177,7 @@ var $ = (function() {
           if(callback.call(elements[key], key, elements[key]) === false) return elements;
         }
       return elements;
-  	}
+  	};
 	
 	$.fn = {
 	    forEach: emptyArray.forEach,
@@ -348,9 +347,19 @@ var $ = (function() {
 			this.logElementTree();
 		});
 	};
+	$.fn.capture = function(imageName) {
+		imageName = imageName || new Date().toString();
+		return this.each(function() {
+			$.capture(imageName + "-" + this.name(), this.rect());
+		});
+	};
 	
-	$.log = function(str) {
-		UIALogger.logMessage(str);
+	$.log = function(str, level) {
+		level = level || "message";
+		if (level === "error") UIALogger.logError(str);
+		else if (level === "warn") UIALogger.logWarning(str);
+		else if (level === "debug") UIALogger.logDebug(str);
+		else UIALogger.logMessage(str);
 	};
 	$.timeout = function(duration) {
 		target.setTimeout(duration);
@@ -407,7 +416,7 @@ var $ = (function() {
 		}
 	};
 	
-    'delay,cmd,orientation,location,shake,rotate,pinch,drag,flick,lock,background,capture,volume'.split(',').forEach(function(property) {
+    'delay,cmd,orientation,location,shake,rotate,pinch,drag,flick,lock,background,volume'.split(',').forEach(function(property) {
       	var fn = $[property];
       	$.fn[property] = function() {
 			fn.apply($, arguments);
