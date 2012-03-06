@@ -1,5 +1,5 @@
-/*!
- * mechanic.js UIAutomation Library v@VERSION
+/*
+ * mechanic.js UIAutomation Library
  * http://cozykozy.com/
  *
  * Copyright 2012, Jason Kozemczak
@@ -9,7 +9,6 @@
  * Copyright 2010-2012, Thomas Fuchs
  * Zepto.js may be freely distributed under the MIT license.
  *
- * Date: @DATE
  */
 
 var $ = (function() {
