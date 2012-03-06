@@ -14,7 +14,7 @@ MECHANIC_COMPONENTS = [
 task :default => [:clean, :concat, :dist]
 
 # MECHANIC_TESTS = %w[
-#   test/zepto.html
+#   test/mechanic.html
 #   test/ajax.html
 #   test/data.html
 #   test/detect.html
