@@ -80,28 +80,25 @@ var mechanic = (function() {
 			return null;
 		}
 	};
-	UIAElement.prototype.getElementByType = function(type) {
-		if (this.isType(type)) return this;
+	UIAElement.prototype.getElementsByType = function(type) {
+		if (this.isType(type)) return [this];
 		else {
 			var elements = this.elements();
 			var i;
 			for (i = 0; i < elements.length; i++) {
-				var elementByType = elements[i].getElementByType(type);
-				if (elementByType) {
-					return elementByType;
-				}
+				 var matches = elements[i].getElementsByType(type);
+				 if (matches.length > 0) return matches;
 			}
 			
-			// if we get here, we don't have a valid choice
-			return null;
+			return [];
 		}	
 	};
 	UIAElement.prototype.isType = function(type) {
 		var thisType = this.toString().split(" ")[1];
 		thisType = thisType.substr(0, thisType.length - 1);
-		if (type === thisType) return this;
-		else if (typeShortcuts[thisType] !== undefined && typeShortcuts[thisType].indexOf(type) >= 0) return this;
-		else return null;
+		if (type === thisType) return true;
+		else if (typeShortcuts[thisType] !== undefined && typeShortcuts[thisType].indexOf(type) >= 0) return true;
+		else return false;
 	};
 	
     function isF(value) { return ({}).toString.call(value) == "[object Function]" }
@@ -140,8 +137,8 @@ var mechanic = (function() {
 			found = element.getElementByName(selector.substr(1));
 			return found ? [found] : emptyArray;
 		} else if (typeSelectorRE.test(selector)) {
-			found = element.getElementByType(selector);
-			return found ? [found] : emptyArray;
+			found = element.getElementsByType(selector);
+			return found ? found : emptyArray;
 		} else {
 			return emptyArray;
 		}
