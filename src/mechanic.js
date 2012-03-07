@@ -81,17 +81,11 @@ var mechanic = (function() {
 		}
 	};
 	UIAElement.prototype.getElementsByType = function(type) {
-		if (this.isType(type)) return [this];
-		else {
-			var elements = this.elements();
-			var i;
-			for (i = 0; i < elements.length; i++) {
-				 var matches = elements[i].getElementsByType(type);
-				 if (matches.length > 0) return matches;
-			}
-			
-			return [];
-		}	
+		return $.map(this.elements().toArray(), function(el) {
+			var matches = el.getElementsByType(type);
+			if (el.isType(type)) matches.unshift(el);
+			return matches;
+		});	
 	};
 	UIAElement.prototype.isType = function(type) {
 		var thisType = this.toString().split(" ")[1];
@@ -126,7 +120,7 @@ var mechanic = (function() {
 		else {
 			var dom;
 			if (isA(selector)) dom = compact(selector);
-			else dom = $$(window, selector);
+			else dom = $$(app, selector);
 			return Z(dom, selector);
 		}
     }
