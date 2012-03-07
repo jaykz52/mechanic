@@ -11,16 +11,15 @@
  *
  */
 
-var $ = (function() {
+var mechanic = (function() {
 	var target = UIATarget.localTarget();
 	target.setTimeout(0);
 	
 	var app = target.frontMostApp(),
 		window = app.mainWindow(),
-		emptyArray = [],
+		emptyArray = [], 
 		slice = emptyArray.slice,
-		idSelectorRE = /^#([\w-]+)$/,
-		typeSelectorRE = /|UIAPageIndicator/;
+		idSelectorRE = /^#([\w-]+)$/;
 		
 	// shortcut selectors for common elements
 	var typeShortcuts = {
@@ -54,6 +53,16 @@ var $ = (function() {
 		'UIAWebView' : ['webview'],
 		'UIAWindow' : ['window']
 	};
+	
+	var typeSelectorRE = (function() {
+		var typeSelectorREString = "\\";
+		for (key in typeShortcuts) {
+			typeSelectorREString += key + "|";
+			typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|" }); 
+		}
+		typeSelectorREString = typeSelectorREString.substr(0, typeSelectorREString.length - 1);
+		return new RegExp(typeSelectorREString);
+	})();
 		
 	UIAElement.prototype.getElementByName = function(name) {
 		if (this.name() === name) return this;
@@ -72,7 +81,7 @@ var $ = (function() {
 		}
 	};
 	UIAElement.prototype.getElementByType = function(type) {
-		if (type === this.type() || (typeShortcuts[this.type()] !== undefined && typeShortcuts[this.type()].indexOf(type) >= 0)) return this;
+		if (this.isType(type)) return this;
 		else {
 			var elements = this.elements();
 			var i;
@@ -87,10 +96,12 @@ var $ = (function() {
 			return null;
 		}	
 	};
-	
-	UIAElement.prototype.type = function() {
-		var type = this.toString().split(" ")[1];
-		return type.substr(0, type.length - 1);
+	UIAElement.prototype.isType = function(type) {
+		var thisType = this.toString().split(" ")[1];
+		thisType = thisType.substr(0, thisType.length - 1);
+		if (type === thisType) return this;
+		else if (typeShortcuts[thisType] !== undefined && typeShortcuts[thisType].indexOf(type) >= 0) return this;
+		else return null;
 	};
 	
     function isF(value) { return ({}).toString.call(value) == "[object Function]" }
@@ -245,7 +256,7 @@ var $ = (function() {
 	      var ancestors = [], elements = this;
 	      while (elements.length > 0)
 	        elements = $.map(elements, function(node){
-	          if ((node = node.parent()) && node.type() !== window.parent().type() && ancestors.indexOf(node) < 0) {
+	          if ((node = node.parent()) && !node.isType("UIAApplication") && ancestors.indexOf(node) < 0) {
 	            ancestors.push(node);
 	            return node;
 	          }
@@ -289,47 +300,28 @@ var $ = (function() {
         });
 	};
 	$.fn.touch = function(duration) {
-        return this.each(function() {
-			this.touchAndHold(duration);
-        });
+        return this.each(function() { this.touchAndHold(duration); });
 	};
-	$.fn.dragInside = function(options) {
-        return this.each(function() {
-			this.dragInsideWithOptions(options);
-        });
+	$.fn.dragInside = function(options) { 
+		return this.each(function() { this.dragInsideWithOptions(options); });
 	};
 	$.fn.flick = function(options) {
-        return this.each(function() {
-			this.flickInsideWithOptions(options);
-        });
+        return this.each(function() { this.flickInsideWithOptions(options); });
 	};
 	$.fn.rotate = function(options) {
-        return this.each(function() {
-			this.rotateWithOptions(options);
-        });
+        return this.each(function() { this.rotateWithOptions(options); });
 	};
 	$.fn.scrollToVisible = function() {
-        return this.each(function() {
-			this.scrollToVisible();
-        });
+		if (this.length > 0) this[0].scrollToVisible();
+		return this;
 	};
 	
 	// other selector-type UIA helpers
-	$.fn.name = function() {
-		return (this.length > 0) ? this[0].name() : null;
-	};
-	$.fn.label = function() {
-		return (this.length > 0) ? this[0].label() : null;
-	};
-	$.fn.value = function() {
-		return (this.length > 0) ? this[0].value() : null;
-	};
-	$.fn.isFocused = function() {
-		return (this.length > 0) ? this[0].hasKeyboardFocus() : false;		
-	};
-	$.fn.isVisible = function() {
-		return (this.length > 0) ? this[0].isVisible() : false;		
-	};
+	$.fn.name = function() { return (this.length > 0) ? this[0].name() : null; };
+	$.fn.label = function() { return (this.length > 0) ? this[0].label() : null; };
+	$.fn.value = function() { return (this.length > 0) ? this[0].value() : null; };
+	$.fn.isFocused = function() { return (this.length > 0) ? this[0].hasKeyboardFocus() : false; };
+	$.fn.isVisible = function() { return (this.length > 0) ? this[0].isVisible() : false; };
 	$.fn.isValid = function(certain) {
 		if (this.length > 0) return false;
 		else if (certain) return this[0].checkIsValid();
@@ -337,39 +329,25 @@ var $ = (function() {
 	};
 	
 	// logging
-	$.fn.log = function() {
-		return this.each(function() {
-			this.logElement();
-		});
-	};
-	$.fn.logTree = function () {
-		return this.each(function() {
-			this.logElementTree();
-		});
-	};
+	$.fn.log = function() { return this.each(function() { this.logElement(); }); };
+	$.fn.logTree = function () { return this.each(function() { this.logElementTree(); }); };
 	$.fn.capture = function(imageName) {
 		imageName = imageName || new Date().toString();
-		return this.each(function() {
-			$.capture(imageName + "-" + this.name(), this.rect());
-		});
+		return this.each(function() { $.capture(imageName + "-" + this.name(), this.rect()); });
 	};
 	
-	$.log = function(str, level) {
+	$.log = function(s, level) {
 		level = level || "message";
-		if (level === "error") UIALogger.logError(str);
-		else if (level === "warn") UIALogger.logWarning(str);
-		else if (level === "debug") UIALogger.logDebug(str);
-		else UIALogger.logMessage(str);
+		if (level === "error") UIALogger.logError(s);
+		else if (level === "warn") UIALogger.logWarning(s);
+		else if (level === "debug") UIALogger.logDebug(s);
+		else UIALogger.logMessage(s);
 	};
-	$.timeout = function(duration) {
-		target.setTimeout(duration);
-	};
-	$.delay = function(seconds) {
-		target.delay(seconds);
-	};
-	$.cmd = function(path, args, timeout) {
-		target.host().performTaskWithPathArgumentsTimeout(path, args, timeout);
-	};
+	$.error = function(s){ $.log(s, "error"); }; $.warn = function(s){ $.log(s, "warn"); }; $.debug = function(s){ $.log(s, "debug"); }; $.message = function(s){ $.log(s, "message"); };
+	
+	$.timeout = function(duration) { target.setTimeout(duration); };
+	$.delay = function(seconds) { target.delay(seconds); };
+	$.cmd = function(path, args, timeout) { target.host().performTaskWithPathArgumentsTimeout(path, args, timeout); };
 	$.orientation = function(orientation) {
 		if (orientation === undefined || orientation === null) return target.deviceOrientation();
 		else target.setDeviceOrientation(orientation);
@@ -378,29 +356,17 @@ var $ = (function() {
 		options = options || {};
 		target.setLocationWithOptions(options);
 	};
-	$.shake = function() {
-		target.shake();
-	};
-	$.rotate = function(options) {
-		target.rotateWithOptions(options);
-	};
-	$.pinch = function(options) {
+	$.shake = function() { target.shake(); };
+	$.rotate = function(options) { target.rotateWithOptions(options); };
+	$.pinchScreen = function(options) {
 		if (!options.style) options.style = 'open';
 		if (options.style === 'close') target.pinchCloseFromToForDuration(options.from, options.to, options.duration);
 		else target.pinchOpenFromToForDuration(options.from, options.to, options.duration);
 	};
-	$.drag = function(options) {
-		target.dragFromToForDuration(options.from, options.to, options.duration);
-	};
-	$.flick = function(options) {
-		target.flickFromTo(options.from, options.to);
-	}
-	$.lock = function(duration) {
-		target.lockForDuration(duration);
-	};
-	$.background = function(duration) {
-		target.deactivateAppForDuration(duration);
-	};
+	$.drag = function(options) { target.dragFromToForDuration(options.from, options.to, options.duration); };
+	$.flick = function(options) { target.flickFromTo(options.from, options.to); };
+	$.lock = function(duration) { target.lockForDuration(duration); };
+	$.backgroundApp = function(duration) { target.deactivateAppForDuration(duration); };
 	$.capture = function(imageName, rect) {
 		imageName = imageName || new Date().toString();
 		if (rect) target.captureRectWithName(rect, imageName);
@@ -416,7 +382,7 @@ var $ = (function() {
 		}
 	};
 	
-    'delay,cmd,orientation,location,shake,rotate,pinch,drag,flick,lock,background,volume'.split(',').forEach(function(property) {
+    'delay,cmd,orientation,location,shake,pinchScreen,drag,lock,backgroundApp,volume'.split(',').forEach(function(property) {
       	var fn = $[property];
       	$.fn[property] = function() {
 			fn.apply($, arguments);
@@ -427,3 +393,5 @@ var $ = (function() {
 	Z.prototype = $.fn;
 	return $;
 })();
+
+var $ = $ || mechanic;  // expose $ shortcut
