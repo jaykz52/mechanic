@@ -19,7 +19,7 @@ var mechanic = (function() {
 		window = app.mainWindow(),
 		emptyArray = [], 
 		slice = emptyArray.slice,
-		idSelectorRE = /^#([\w-]+)$/;
+		idSelectorRE = /^#([\w\s-]+)$/;
 		
 	// shortcut selectors for common elements
 	var typeShortcuts = {
@@ -65,20 +65,14 @@ var mechanic = (function() {
 	})();
 		
 	UIAElement.prototype.getElementByName = function(name) {
-		if (this.name() === name) return this;
-		else {
-			var elements = this.elements();
-			var i;
-			for (i = 0; i < elements.length; i++) {
-				var elementByName = elements[i].getElementByName(name);
-				if (elementByName) {
-					return elementByName;
-				}
-			}
-			
-			// if we get here, we don't have a valid choice
-			return null;
-		}
+		var foundEl = null;
+		$.each(this.elements().toArray(), function(idx, el) {
+			if (el.name() === name) foundEl = el;
+			else foundEl = el.getElementByName(name);
+			if (foundEl) return false;
+		});
+		
+		return foundEl;
 	};
 	UIAElement.prototype.getElementsByType = function(type) {
 		return $.map(this.elements().toArray(), function(el) {
@@ -92,6 +86,7 @@ var mechanic = (function() {
 		thisType = thisType.substr(0, thisType.length - 1);
 		if (type === thisType) return true;
 		else if (typeShortcuts[thisType] !== undefined && typeShortcuts[thisType].indexOf(type) >= 0) return true;
+		else if (type === "*" || type === "UIAElement") return true;
 		else return false;
 	};
 	
@@ -120,6 +115,7 @@ var mechanic = (function() {
 		else {
 			var dom;
 			if (isA(selector)) dom = compact(selector);
+			else if (selector instanceof UIAElement) dom = [selector]
 			else dom = $$(app, selector);
 			return Z(dom, selector);
 		}
@@ -283,8 +279,8 @@ var mechanic = (function() {
 	// eventing
 	$.fn.tap = function(options) {
 		options = options || {};
-		if (!options.style) options.style = 'single';
         return this.each(function() {
+			// TODO: tapWithOptions supports most of the behavior of doubleTap/twoFingerTap looking at the API, do we need to support these methods??
 			if (options.style === 'double') this.doubleTap();
 			else if (options.style === 'twoFinger') this.twoFingerTap();
 			else this.tapWithOptions(options);
