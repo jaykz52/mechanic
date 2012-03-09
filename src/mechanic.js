@@ -337,14 +337,19 @@ var mechanic = (function() {
 	});
 	
 	// logging
-	$.log = function(s, level) {
-		level = level || 'message';
-		if (level === 'error') UIALogger.logError(s);
-		else if (level === 'warn') UIALogger.logWarning(s);
-		else if (level === 'debug') UIALogger.logDebug(s);
-		else UIALogger.logMessage(s);
-	};
-	$.error = function(s){ $.log(s, 'error'); }; $.warn = function(s){ $.log(s, 'warn'); }; $.debug = function(s){ $.log(s, 'debug'); }; $.message = function(s){ $.log(s, 'message'); };
+	$.extend($, {
+		log: function(s, level) {
+			level = level || 'message';
+			if (level === 'error') UIALogger.logError(s);
+			else if (level === 'warn') UIALogger.logWarning(s);
+			else if (level === 'debug') UIALogger.logDebug(s);
+			else UIALogger.logMessage(s);
+		},
+		error: function(s) { $.log(s, 'error'); },
+		warn: function(s) { $.log(s, 'warn'); },
+		debug: function(s) { $.log(s, 'debug'); },
+		message: function(s) { $.log(s, 'message'); }
+	});
 	$.extend($.fn, {
 		log: function() { return this.each(function() { this.logElement(); }); },
 		logTree: function () { return this.each(function() { this.logElementTree(); }); },
@@ -353,63 +358,66 @@ var mechanic = (function() {
 			return this.each(function() { $.capture(imageName + '-' + this.name(), this.rect()); });
 		}
 	});
-
 	
-	$.version = function() {
-		return app.version();
-	};
-	$.bundleId = function ()  {
-		return app.bundleID();
-	};
-	$.prefs = function(prefsOrKey) {
-		// TODO: should we handle no-arg version that returns all prefs???
-		if (typeof prefsToReturn == 'string') return app.preferencesValueForKey();
-		else {
-			$.each(prefsOrKey, function(val, key) {
-				app.setPreferencesValueForKey(val, key);
-			});
+	$.extend($, {
+		version: function() {
+			return app.version();
+		},
+		bundleId: function()  {
+			return app.bundleID();
+		},
+		prefs: function(prefsOrKey) {
+			// TODO: should we handle no-arg version that returns all prefs???
+			if (typeof prefsToReturn == 'string') return app.preferencesValueForKey();
+			else {
+				$.each(prefsOrKey, function(val, key) {
+					app.setPreferencesValueForKey(val, key);
+				});
+			}
 		}
-	};
+	});
 	
-	$.timeout = function(duration) { target.setTimeout(duration); };
-	$.delay = function(seconds) { target.delay(seconds); };
-	$.cmd = function(path, args, timeout) { target.host().performTaskWithPathArgumentsTimeout(path, args, timeout); };
-	$.orientation = function(orientation) {
-		if (orientation === undefined || orientation === null) return target.deviceOrientation();
-		else target.setDeviceOrientation(orientation);
-	};
-	$.location = function(coordinates, options) {
-		options = options || {};
-		target.setLocationWithOptions(options);
-	};
-	$.shake = function() { target.shake(); };
-	$.rotate = function(options) { target.rotateWithOptions(options); };
-	$.pinchScreen = function(options) {
-		if (!options.style) options.style = 'open';
-		if (options.style === 'close') target.pinchCloseFromToForDuration(options.from, options.to, options.duration);
-		else target.pinchOpenFromToForDuration(options.from, options.to, options.duration);
-	};
-	$.drag = function(options) { target.dragFromToForDuration(options.from, options.to, options.duration); };
-	$.flick = function(options) { target.flickFromTo(options.from, options.to); };
-	$.lock = function(duration) { target.lockForDuration(duration); };
-	$.backgroundApp = function(duration) { target.deactivateAppForDuration(duration); };
-	$.capture = function(imageName, rect) {
-		imageName = imageName || new Date().toString();
-		if (rect) target.captureRectWithName(rect, imageName);
-		else target.captureScreenWithName(imageName);
-	};
-	$.volume = function(direction, duration) {
-		if (direction === 'up') {
-			if (duration) target.holdVolumeUp(duration)
-			else target.clickVolumeUp();
-		} else {
-			if (duration) target.holdVolumeDown(duration);
-			else target.clickVolumeDown();
-		}
-	};
-	$.input = function(s) {
-		app.keyboard().typeString(s);
-	};
+	$.extend($, {
+		timeout: function(duration) { target.setTimeout(duration); },
+		delay: function(seconds) { target.delay(seconds); },
+		cmd: function(path, args, timeout) { target.host().performTaskWithPathArgumentsTimeout(path, args, timeout); },
+		orientation: function(orientation) {
+			if (orientation === undefined || orientation === null) return target.deviceOrientation();
+			else target.setDeviceOrientation(orientation);
+		},
+		location: function(coordinates, options) {
+			options = options || {};
+			target.setLocationWithOptions(options);
+		},
+		shake: function() { target.shake(); },
+		rotate: function(options) { target.rotateWithOptions(options); },
+		pinchScreen: function(options) {
+			if (!options.style) options.style = 'open';
+			if (options.style === 'close') target.pinchCloseFromToForDuration(options.from, options.to, options.duration);
+			else target.pinchOpenFromToForDuration(options.from, options.to, options.duration);
+		},
+		drag: function(options) { target.dragFromToForDuration(options.from, options.to, options.duration); },
+		flick: function(options) { target.flickFromTo(options.from, options.to); },
+		lock: function(duration) { target.lockForDuration(duration); },
+		backgroundApp: function(duration) { target.deactivateAppForDuration(duration); },
+		capture: function(imageName, rect) {
+			imageName = imageName || new Date().toString();
+			if (rect) target.captureRectWithName(rect, imageName);
+			else target.captureScreenWithName(imageName);
+		},
+		volume: function(direction, duration) {
+			if (direction === 'up') {
+				if (duration) target.holdVolumeUp(duration)
+				else target.clickVolumeUp();
+			} else {
+				if (duration) target.holdVolumeDown(duration);
+				else target.clickVolumeDown();
+			}
+		},
+		input: function(s) {
+			app.keyboard().typeString(s);
+		}	
+	});
 	
     'delay,cmd,orientation,location,shake,pinchScreen,drag,lock,backgroundApp,volume'.split(',').forEach(function(property) {
       	var fn = $[property];
