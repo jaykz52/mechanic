@@ -87,7 +87,7 @@ var mechanic = (function() {
 		thisType = thisType.substr(0, thisType.length - 1);
 		if (type === thisType) return true;
 		else if (typeShortcuts[thisType] !== undefined && typeShortcuts[thisType].indexOf(type) >= 0) return true;
-		else if (type === "*" || type === "UIAElement") return true;
+		else if (type === '*' || type === 'UIAElement') return true;
 		else return false;
 	};
 	
@@ -256,7 +256,7 @@ var mechanic = (function() {
 	      var ancestors = [], elements = this;
 	      while (elements.length > 0)
 	        elements = $.map(elements, function(node){
-	          if ((node = node.parent()) && !node.isType("UIAApplication") && ancestors.indexOf(node) < 0) {
+	          if ((node = node.parent()) && !node.isType('UIAApplication') && ancestors.indexOf(node) < 0) {
 	            ancestors.push(node);
 	            return node;
 	          }
@@ -270,7 +270,7 @@ var mechanic = (function() {
 	      return filtered(this.map(function(){ return slice.call(this.elements()) }), selector);
 	    },
 	    siblings: function(selector) {
-	      return filtered(this.map(function(i, el){
+	      return filtered(this.map(function(i, el) {
 	        return slice.call(el.parent().elements()).filter(function(child){ return child!==el });
 	      }), selector);
 	    },
@@ -290,64 +290,86 @@ var mechanic = (function() {
     });
 	
 	// eventing
-	$.fn.tap = function(options) {
-		options = options || {};
-        return this.each(function() {
-			// TODO: tapWithOptions supports most of the behavior of doubleTap/twoFingerTap looking at the API, do we need to support these methods??
-			if (options.style === 'double') this.doubleTap();
-			else if (options.style === 'twoFinger') this.twoFingerTap();
-			else this.tapWithOptions(options);
-        });
-	};
-	$.fn.touch = function(duration) {
-        return this.each(function() { this.touchAndHold(duration); });
-	};
-	$.fn.dragInside = function(options) { 
-		return this.each(function() { this.dragInsideWithOptions(options); });
-	};
-	$.fn.flick = function(options) {
-        return this.each(function() { this.flickInsideWithOptions(options); });
-	};
-	$.fn.rotate = function(options) {
-        return this.each(function() { this.rotateWithOptions(options); });
-	};
-	$.fn.scrollToVisible = function() {
-		if (this.length > 0) this[0].scrollToVisible();
-		return this;
-	};
-	$.fn.input = function(s) {
-		if (!this.isFocused()) this.tap();
-		app.keyboard().typeString(s);
-	};
+	$.extend($.fn, {
+		tap: function(options) {
+			options = options || {};
+			return this.each(function() {
+				// TODO: tapWithOptions supports most of the behavior of doubleTap/twoFingerTap looking at the API, do we need to support these methods??
+				if (options.style === 'double') this.doubleTap();
+				else if (options.style === 'twoFinger') this.twoFingerTap();
+				else this.tapWithOptions(options);
+			});
+		},
+		touch: function(duration) {
+			return this.each(function() { this.touchAndHold(duration); });
+		},
+		dragInside: function(options) { 
+			return this.each(function() { this.dragInsideWithOptions(options); });
+		},
+		flick: function(options) {
+			return this.each(function() { this.flickInsideWithOptions(options); });
+		},
+		rotate: function(options) {
+			return this.each(function() { this.rotateWithOptions(options); });
+		},
+		scrollToVisible: function() {
+			if (this.length > 0) this[0].scrollToVisible();
+			return this;
+		},
+		input: function(s) {
+			if (!this.isFocused()) this.tap();
+			$.input(s);
+		}
+	});
 	
 	// other selector-type UIA helpers
-	$.fn.name = function() { return (this.length > 0) ? this[0].name() : null; };
-	$.fn.label = function() { return (this.length > 0) ? this[0].label() : null; };
-	$.fn.value = function() { return (this.length > 0) ? this[0].value() : null; };
-	$.fn.isFocused = function() { return (this.length > 0) ? this[0].hasKeyboardFocus() : false; };
-	$.fn.isVisible = function() { return (this.length > 0) ? this[0].isVisible() : false; };
-	$.fn.isValid = function(certain) {
-		if (this.length > 0) return false;
-		else if (certain) return this[0].checkIsValid();
-		else return this[0].isValid();
-	};
+	$.extend($.fn, {
+		name: function() { return (this.length > 0) ? this[0].name() : null; },
+		label: function() { return (this.length > 0) ? this[0].label() : null; },
+		value: function() { return (this.length > 0) ? this[0].value() : null; },
+		isFocused: function() { return (this.length > 0) ? this[0].hasKeyboardFocus() : false; },
+		isVisible: function() { return (this.length > 0) ? this[0].isVisible() : false; },
+		isValid: function(certain) {
+			if (this.length > 0) return false;
+			else if (certain) return this[0].checkIsValid();
+			else return this[0].isValid();
+		}
+	});
 	
 	// logging
-	$.fn.log = function() { return this.each(function() { this.logElement(); }); };
-	$.fn.logTree = function () { return this.each(function() { this.logElementTree(); }); };
-	$.fn.capture = function(imageName) {
-		imageName = imageName || new Date().toString();
-		return this.each(function() { $.capture(imageName + "-" + this.name(), this.rect()); });
-	};
-	
 	$.log = function(s, level) {
-		level = level || "message";
-		if (level === "error") UIALogger.logError(s);
-		else if (level === "warn") UIALogger.logWarning(s);
-		else if (level === "debug") UIALogger.logDebug(s);
+		level = level || 'message';
+		if (level === 'error') UIALogger.logError(s);
+		else if (level === 'warn') UIALogger.logWarning(s);
+		else if (level === 'debug') UIALogger.logDebug(s);
 		else UIALogger.logMessage(s);
 	};
-	$.error = function(s){ $.log(s, "error"); }; $.warn = function(s){ $.log(s, "warn"); }; $.debug = function(s){ $.log(s, "debug"); }; $.message = function(s){ $.log(s, "message"); };
+	$.error = function(s){ $.log(s, 'error'); }; $.warn = function(s){ $.log(s, 'warn'); }; $.debug = function(s){ $.log(s, 'debug'); }; $.message = function(s){ $.log(s, 'message'); };
+	$.extend($.fn, {
+		log: function() { return this.each(function() { this.logElement(); }); },
+		logTree: function () { return this.each(function() { this.logElementTree(); }); },
+		capture: function(imageName) {
+			imageName = imageName || new Date().toString();
+			return this.each(function() { $.capture(imageName + '-' + this.name(), this.rect()); });
+		}
+	});
+
+	
+	$.version = function() {
+		return app.version();
+	};
+	$.bundleId = function ()  {
+		return app.bundleID();
+	};
+	$.prefs = function(prefsOrKey) {
+		// TODO: should we handle no-arg version that returns all prefs???
+		if (typeof prefsToReturn == 'string') return app.preferencesValueForKey();
+		else {
+			$.each(prefsOrKey, function(val, key) {
+				app.setPreferencesValueForKey(val, key);
+			});
+		}
+	};
 	
 	$.timeout = function(duration) { target.setTimeout(duration); };
 	$.delay = function(seconds) { target.delay(seconds); };
@@ -377,13 +399,16 @@ var mechanic = (function() {
 		else target.captureScreenWithName(imageName);
 	};
 	$.volume = function(direction, duration) {
-		if (direction === "up") {
+		if (direction === 'up') {
 			if (duration) target.holdVolumeUp(duration)
 			else target.clickVolumeUp();
 		} else {
 			if (duration) target.holdVolumeDown(duration);
 			else target.clickVolumeDown();
 		}
+	};
+	$.input = function(s) {
+		app.keyboard().typeString(s);
 	};
 	
     'delay,cmd,orientation,location,shake,pinchScreen,drag,lock,backgroundApp,volume'.split(',').forEach(function(property) {
