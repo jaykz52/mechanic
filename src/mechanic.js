@@ -27,6 +27,7 @@ var mechanic = (function() {
 		'UIAActivityIndicator' : ['activityIndicator'],
 		'UIAAlert' : ['alert'],
 		'UIAButton' : ['button'],
+		'UIAElement' : ['\\*'], // TODO: sort of a hack
 		'UIAImage' : ['image'],
 		'UIAImage' : ['image'],
 		'UIALink' : ['link'],
@@ -100,7 +101,6 @@ var mechanic = (function() {
 	
     function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index }) }
 
-	
     function Z(dom, selector){
       dom = dom || emptyArray;
       dom.__proto__ = Z.prototype;
@@ -239,6 +239,19 @@ var mechanic = (function() {
 	      else result = this.map(function(){ return $$(this, selector) });
 	      return $(result);
 	    },
+		predicate: function(predicate) {
+			return this.map(function(el, idx) {
+				if (typeof predicate == 'string') return el.withPredicate(predicate);
+				else return null; // TODO: handle map with key/values to match using withValueForKey
+			});
+		},
+	    closest: function(selector, context) {
+	      	var el = this[0], candidates = $$(context || app, selector);
+	      	if (!candidates.length) el = null;
+	      	while (el && candidates.indexOf(el) < 0)
+	      		el = el !== context && el !== app && el.parent();
+	    	return $(el);
+	    },
 	    ancestry: function(selector) {
 	      var ancestors = [], elements = this;
 	      while (elements.length > 0)
@@ -247,7 +260,7 @@ var mechanic = (function() {
 	            ancestors.push(node);
 	            return node;
 	          }
-	        });
+	   	  });
 	      return filtered(ancestors, selector);
 	    },
 	    parent: function(selector) {
@@ -301,6 +314,10 @@ var mechanic = (function() {
 	$.fn.scrollToVisible = function() {
 		if (this.length > 0) this[0].scrollToVisible();
 		return this;
+	};
+	$.fn.input = function(s) {
+		if (!this.isFocused()) this.tap();
+		app.keyboard().typeString(s);
 	};
 	
 	// other selector-type UIA helpers
