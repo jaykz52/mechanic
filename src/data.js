@@ -1,3 +1,7 @@
+//     mechanic.js
+//     Copyright (c) 2012 Jason Kozemczak
+//     mechanic.js may be freely distributed under the MIT license.
+
 (function($) {
 	$.extend($.fn, {
 		name: function() { return (this.length > 0) ? this[0].name() : null; },

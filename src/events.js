@@ -1,3 +1,7 @@
+//     mechanic.js
+//     Copyright (c) 2012 Jason Kozemczak
+//     mechanic.js may be freely distributed under the MIT license.
+
 (function($) {
 	$.extend($, {
 		timeout: function(duration) { target.setTimeout(duration); },

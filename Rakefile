@@ -11,7 +11,7 @@ MECHANIC_COMPONENTS = [
   'mechanic-core',
   'logging',
   'data',
-  'events'  
+  'events'
 ]
 
 task :default => [:clean, :concat, :dist]
@@ -71,27 +71,6 @@ def google_compiler(src, target)
   `java -jar vendor/google-compiler/compiler.jar --js #{src} --summary_detail_level 3 --js_output_file #{target}`
 end
 
-def yui_compressor(src, target)
-  puts "Minifying #{src} with YUI Compressor..."
-  `java -jar vendor/yuicompressor/yuicompressor-2.4.2.jar #{src} -o #{target}`
-end
-
-def uglifyjs(src, target)
-  begin
-    require 'uglifier'
-  rescue LoadError => e
-    if verbose
-      puts "\nYou'll need the 'uglifier' gem for minification. Just run:\n\n"
-      puts "  $ gem install uglifier"
-      puts "\nand you should be all set.\n\n"
-      exit
-    end
-    return false
-  end
-  puts "Minifying #{src} with UglifyJS..."
-  File.open(target, "w"){|f| f.puts Uglifier.new.compile(File.read(src))}
-end
-
 def process_minified(src, target)
   cp target, File.join(MECHANIC_DIST_DIR,'temp.js')
   msize = File.size(File.join(MECHANIC_DIST_DIR,'temp.js'))
@@ -106,24 +85,10 @@ def process_minified(src, target)
   puts "Minified and gzipped: %.3fk, compression factor %.3f" % [dsize/1024.0, osize/dsize.to_f]
 end
 
-desc "Generates a minified version for distribution, using UglifyJS."
+desc "Generates a minified version for distribution using the Google Closure compiler."
 task :dist do
   src, target = File.join(MECHANIC_DIST_DIR,'mechanic.js'), File.join(MECHANIC_DIST_DIR,'mechanic.min.js')
-  uglifyjs src, target
-  process_minified src, target
-end
-
-desc "Generates a minified version for distribution using the Google Closure compiler."
-task :googledist do
-  src, target = File.join(MECHANIC_DIST_DIR,'mechanic.js'), File.join(MECHANIC_DIST_DIR,'mechanic.min.js')
   google_compiler src, target
-  process_minified src, target
-end
-
-desc "Generates a minified version for distribution using the YUI compressor."
-task :yuidist do
-  src, target = File.join(MECHANIC_DIST_DIR,'mechanic.js'), File.join(MECHANIC_DIST_DIR,'mechanic.min.js')
-  yui_compressor src, target
   process_minified src, target
 end
 
@@ -133,7 +98,7 @@ Rake::PackageTask.new('mechanic', MECHANIC_VERSION) do |package|
   package.package_dir = MECHANIC_PKG_DIR
   package.package_files.include(
     'README.md',
-    'MIT-LICENSE',
+    'LICENSE',
     'dist/**/*',
     'src/**/*',
     'test/**/*',
