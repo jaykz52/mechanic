@@ -8,7 +8,10 @@ MECHANIC_DIST_DIR = File.join(MECHANIC_ROOT, 'dist')
 MECHANIC_PKG_DIR  = File.join(MECHANIC_ROOT, 'pkg')
 
 MECHANIC_COMPONENTS = [
-  'mechanic',
+  'mechanic-core',
+  'logging',
+  'data',
+  'events'  
 ]
 
 task :default => [:clean, :concat, :dist]
