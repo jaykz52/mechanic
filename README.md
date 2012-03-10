@@ -98,17 +98,17 @@ mechanic("#some element name").ancestry().capture();
 ...
 ```
 
-## Feature Requests/Bugs
+##Feature Requests/Bugs
 
  Mechanic is not perfect. Submit bugs and feature requests if there's something that you think is missing! If you encounter bugs, please report it on mechanic's Issues page: http://github.com/jaykz52/mechanic/issues
  
 If you've got a fix in mind, fork and submit a pull request. We need contributors!
 
-## Contributing
+##Contributing
 
 The project is currently in its infancy (~ 1 week old!). We need API documentation, additional features, and test coverage (!!!), so feel free to get in touch via github, or just start submitting patches! Try to keep patches to single issues, this will make our lives easier in the long term.
 
-# License
+##License
 
 Copyright (c) 2012 Jason Kozemczak
 
