@@ -1,6 +1,6 @@
 /*
  * mechanic.js UIAutomation Library
- * http://cozykozy.com/pages/mechanic
+ * http://cozykozy.com/pages/mechanicjs
  *
  * Copyright (c) 2012 Jason Kozemczak
  * mechanic.js may be freely distributed under the MIT license.

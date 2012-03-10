@@ -1,4 +1,4 @@
-#[mechanic.js](http://www.cozykozy.com/pages/mechanic)  (UIAutomation for the rest of us)
+#[mechanic.js](http://www.cozykozy.com/pages/mechanicjs)  (UIAutomation for the rest of us)
 
 mechanic.js lets you take the power of UIAutomation with the simplicity of modern javascript CSS selector engines to make your UIAutomation scripts terse and beautiful.
 
