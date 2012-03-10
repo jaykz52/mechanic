@@ -24,7 +24,7 @@ If you've already got a hold of the instances you care about, they can be passed
 
 ``` js
 var mainWindow = UIATarget.localTarget().frontMostApp().mainWindow();
-$(mainWindow).children().log();		// this calls logElement() internall
+$(mainWindow).children().log();		// this calls logElement() internally
 ```
 
 Mechanic comes with a number of utility functions to make your life easier:
@@ -80,7 +80,7 @@ If there's a feature you're missing, it's easy to extend mechanic with your own 
 			return this;	// returning 'this' allows you to chain selector-based functions together
 		}
 	});
-}))();
+})();
 
 $.someAwesomeFeature();
 $("tableview").aNewSelectorMethod();	
