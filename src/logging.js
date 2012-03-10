@@ -14,9 +14,14 @@
  		error: function(s) { $.log(s, 'error'); },
  		warn: function(s) { $.log(s, 'warn'); },
  		debug: function(s) { $.log(s, 'debug'); },
- 		message: function(s) { $.log(s, 'message'); }
+ 		message: function(s) { $.log(s, 'message'); },
+		capture: function(imageName, rect) {
+			imageName = imageName || new Date().toString();
+			if (rect) target.captureRectWithName(rect, imageName);
+			else target.captureScreenWithName(imageName);
+		}
  	});
-	
+
  	$.extend($.fn, {
  		log: function() { return this.each(function() { this.logElement(); }); },
  		logTree: function () { return this.each(function() { this.logElementTree(); }); },

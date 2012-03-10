@@ -1,6 +1,6 @@
 /*
  * mechanic.js UIAutomation Library
- * http://cozykozy.com/
+ * http://cozykozy.com/pages/mechanic
  *
  * Copyright (c) 2012 Jason Kozemczak
  * mechanic.js may be freely distributed under the MIT license.
@@ -13,17 +13,17 @@
 var mechanic = (function() {
 	// Save a reference to the local target for convenience
 	var target = UIATarget.localTarget();
-	
+
 	// Set the default timeout value to 0 to avoid making walking the object tree incredibly slow.
 	// Developers can adjust this value by calling $.timeout(duration)
 	target.setTimeout(0);
-	
+
 	var app = target.frontMostApp(),
 		window = app.mainWindow(),
-		emptyArray = [], 
+		emptyArray = [],
 		slice = emptyArray.slice,
 		idSelectorRE = /^#([\w\s-]+)$/;
-		
+
 	// Setup a map of UIAElement types to their "shortcut" selectors.
 	var typeShortcuts = {
 		'UIAActionSheet' : ['actionsheet'],
@@ -40,13 +40,13 @@ var mechanic = (function() {
 		'UIAPopover' : ['popover'],
 		'UIAProgressIndicator' : ['progress'],
 		'UIAScrollView' : ['scrollview'],
-		'UIASearchBar' : ['searchbar'],		
+		'UIASearchBar' : ['searchbar'],
 		'UIASecureTextField' : ['secure'],
 		'UIASegmentedControl' : ['segemented'],
 		'UIASlider' : ['slider'],
 		'UIAStaticText' : ['text'],
 		'UIAStatusBar' : ['statusbar'],
-		'UIASwitch' : ['switch'],	
+		'UIASwitch' : ['switch'],
 		'UIATabBar' : ['tabbar'],
 		'UIATableView' : ['tableview'],
 		'UIATableCell' : ['cell'],
@@ -57,18 +57,18 @@ var mechanic = (function() {
 		'UIAWebView' : ['webview'],
 		'UIAWindow' : ['window']
 	};
-	
+
 	// Build a RegExp for picking out type selectors.
 	var typeSelectorRE = (function() {
 		var typeSelectorREString = "\\";
 		for (key in typeShortcuts) {
 			typeSelectorREString += key + "|";
-			typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|" }); 
+			typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|" });
 		}
 		typeSelectorREString = typeSelectorREString.substr(0, typeSelectorREString.length - 1);
 		return new RegExp(typeSelectorREString);
 	})();
-		
+
 	// Add functions to UIAElement to make object graph searching easier.
 	UIAElement.prototype.getElementByName = function(name) {
 		var foundEl = null;
@@ -77,7 +77,7 @@ var mechanic = (function() {
 			else foundEl = el.getElementByName(name);
 			if (foundEl) return false;
 		});
-		
+
 		return foundEl;
 	};
 	UIAElement.prototype.getElementsByType = function(type) {
@@ -85,7 +85,7 @@ var mechanic = (function() {
 			var matches = el.getElementsByType(type);
 			if (el.isType(type)) matches.unshift(el);
 			return matches;
-		});	
+		});
 	};
 	UIAElement.prototype.isType = function(type) {
 		var thisType = this.toString().split(" ")[1];
@@ -95,15 +95,15 @@ var mechanic = (function() {
 		else if (type === '*' || type === 'UIAElement') return true;
 		else return false;
 	};
-	
+
     function isF(value) { return ({}).toString.call(value) == "[object Function]" }
     function isO(value) { return value instanceof Object }
     function isA(value) { return value instanceof Array }
     function likeArray(obj) { return typeof obj.length == 'number' }
-	
+
     function compact(array) { return array.filter(function(item){ return item !== undefined && item !== null }) }
     function flatten(array) { return array.length > 0 ? [].concat.apply([], array) : array }
-	
+
     function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index }) }
 
     function Z(dom, selector){
@@ -112,7 +112,7 @@ var mechanic = (function() {
       dom.selector = selector || '';
       return dom;
     }
-	
+
     function $(selector, context) {
 		if (!selector) return Z();
 		if (context !== undefined) return $(context).find(selector);
@@ -125,10 +125,10 @@ var mechanic = (function() {
 			return Z(dom, selector);
 		}
     }
-	
-	$.qsa = $$ = function(element, selector) {		
+
+	$.qsa = $$ = function(element, selector) {
 		var found;
-		if (idSelectorRE.test(selector)) {	
+		if (idSelectorRE.test(selector)) {
 			found = element.getElementByName(selector.substr(1));
 			return found ? [found] : emptyArray;
 		} else if (typeSelectorRE.test(selector)) {
@@ -138,18 +138,18 @@ var mechanic = (function() {
 			return emptyArray;
 		}
 	};
-	
+
     function filtered(elements, selector) {
       return selector === undefined ? $(elements) : $(elements).filter(selector);
     };
-	
+
     $.extend = function(target){
       slice.call(arguments, 1).forEach(function(source) {
         for (key in source) target[key] = source[key];
       });
       return target;
     };
-	
+
     $.inArray = function(elem, array, i) {
   		return emptyArray.indexOf.call(array, elem, i);
   	};
@@ -181,7 +181,7 @@ var mechanic = (function() {
         }
       return elements;
   	};
-	
+
 	$.fn = {
 	    forEach: emptyArray.forEach,
 	    reduce: emptyArray.reduce,
@@ -284,7 +284,7 @@ var mechanic = (function() {
 	    },
 		pluck: function(property) { return this.map(function(){ return this[property] }) }
 	};
-	
+
     'filter,add,not,eq,first,last,find,closest,parents,parent,children,siblings'.split(',').forEach(function(property) {
 		var fn = $.fn[property];
       	$.fn[property] = function() {
@@ -293,7 +293,7 @@ var mechanic = (function() {
         	return ret;
       	};
     });
-	
+
 	Z.prototype = $.fn;
 	return $;
 })();

@@ -1,4 +1,4 @@
-#mechanic.js (UIAutomation for the rest of us)
+#[mechanic.js](http://www.cozykozy.com/pages/mechanic)  (UIAutomation for the rest of us)
 
 mechanic.js lets you take the power of UIAutomation with the simplicity of modern javascript CSS selector engines to make your UIAutomation scripts terse and beautiful.
 
@@ -53,7 +53,7 @@ $.volume({direction: "down"});				// UIATarget.localTarget().clickVolumeDown();
 $.prefs({
 	"pref1": "value1", 						// ... frontMostApp().setPreferencesValueForKey("value1", "pref1");
 	"pref2": "value2"						// ... frontMostApp().setPreferencesValueForKey("value2", "pref2")
-});						
+});
 ```
 
 ###... and more!
@@ -83,7 +83,7 @@ If there's a feature you're missing, it's easy to extend mechanic with your own 
 })();
 
 $.someAwesomeFeature();
-$("tableview").aNewSelectorMethod();	
+$("tableview").aNewSelectorMethod();
 ```
 
 ##Including Mechanic.js
@@ -101,7 +101,7 @@ mechanic("#some element name").ancestry().capture();
 ##Feature Requests/Bugs
 
  Mechanic is not perfect. Submit bugs and feature requests if there's something that you think is missing! If you encounter bugs, please report it on mechanic's Issues page: http://github.com/jaykz52/mechanic/issues
- 
+
 If you've got a fix in mind, fork and submit a pull request. We need contributors!
 
 ##Contributing
@@ -116,4 +116,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

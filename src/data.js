@@ -3,6 +3,7 @@
 //     mechanic.js may be freely distributed under the MIT license.
 
 (function($) {
+	var app = UIATarget.localTarget().frontMostApp();
 	$.extend($.fn, {
 		name: function() { return (this.length > 0) ? this[0].name() : null; },
 		label: function() { return (this.length > 0) ? this[0].label() : null; },
@@ -15,7 +16,7 @@
 			else return this[0].isValid();
 		}
 	});
-	
+
 	$.extend($, {
 		version: function() {
 			return app.version();

@@ -3,6 +3,7 @@
 //     mechanic.js may be freely distributed under the MIT license.
 
 (function($) {
+	var target = UIATarget.localTarget();
 	$.extend($, {
 		timeout: function(duration) { target.setTimeout(duration); },
 		delay: function(seconds) { target.delay(seconds); },
@@ -26,11 +27,6 @@
 		flick: function(options) { target.flickFromTo(options.from, options.to); },
 		lock: function(duration) { target.lockForDuration(duration); },
 		backgroundApp: function(duration) { target.deactivateAppForDuration(duration); },
-		capture: function(imageName, rect) {
-			imageName = imageName || new Date().toString();
-			if (rect) target.captureRectWithName(rect, imageName);
-			else target.captureScreenWithName(imageName);
-		},
 		volume: function(direction, duration) {
 			if (direction === 'up') {
 				if (duration) target.holdVolumeUp(duration)
@@ -41,10 +37,10 @@
 			}
 		},
 		input: function(s) {
-			app.keyboard().typeString(s);
-		}	
+			target.frontMostApp().keyboard().typeString(s);
+		}
 	});
-	
+
 	$.extend($.fn, {
 		tap: function(options) {
 			options = options || {};
@@ -58,7 +54,7 @@
 		touch: function(duration) {
 			return this.each(function() { this.touchAndHold(duration); });
 		},
-		dragInside: function(options) { 
+		dragInside: function(options) {
 			return this.each(function() { this.dragInsideWithOptions(options); });
 		},
 		flick: function(options) {
@@ -78,7 +74,7 @@
 			}
 		}
 	});
-	
+
     'delay,cmd,orientation,location,shake,pinchScreen,drag,lock,backgroundApp,volume'.split(',').forEach(function(property) {
       	var fn = $[property];
       	$.fn[property] = function() {
