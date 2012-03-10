@@ -8,14 +8,13 @@
  * Includes parts of Zepto.js
  * Copyright 2010-2012, Thomas Fuchs
  * Zepto.js may be freely distributed under the MIT license.
- *
  */
 
 var mechanic = (function() {
 	// Save a reference to the local target for convenience
 	var target = UIATarget.localTarget();
 	
-	// We'll set the default timeout value to 0 to avoid making walking the object tree incredibly slow
+	// Set the default timeout value to 0 to avoid making walking the object tree incredibly slow.
 	// Developers can adjust this value by calling $.timeout(duration)
 	target.setTimeout(0);
 	
@@ -25,7 +24,7 @@ var mechanic = (function() {
 		slice = emptyArray.slice,
 		idSelectorRE = /^#([\w\s-]+)$/;
 		
-	// Setup a map of UIAElement types to their "shortcut" selectors
+	// Setup a map of UIAElement types to their "shortcut" selectors.
 	var typeShortcuts = {
 		'UIAActionSheet' : ['actionsheet'],
 		'UIAActivityIndicator' : ['activityIndicator'],
@@ -59,7 +58,7 @@ var mechanic = (function() {
 		'UIAWindow' : ['window']
 	};
 	
-	// Build a RegExp for picking out type selectors
+	// Build a RegExp for picking out type selectors.
 	var typeSelectorRE = (function() {
 		var typeSelectorREString = "\\";
 		for (key in typeShortcuts) {
@@ -70,7 +69,7 @@ var mechanic = (function() {
 		return new RegExp(typeSelectorREString);
 	})();
 		
-	// Add functions to UIAElement to make object graph searching easier
+	// Add functions to UIAElement to make object graph searching easier.
 	UIAElement.prototype.getElementByName = function(name) {
 		var foundEl = null;
 		$.each(this.elements().toArray(), function(idx, el) {
