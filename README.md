@@ -1,4 +1,4 @@
-#[mechanic.js](http://www.cozykozy.com/pages/mechanicjs)  (UIAutomation for the rest of us)
+#[mechanic.js](http://www.cozykozy.com/pages/mechanicjs)  (a CSS-style selector engine for UIAutomation)
 
 mechanic.js lets you take the power of UIAutomation with the simplicity of modern javascript CSS selector engines to make your UIAutomation scripts terse and beautiful.
 
@@ -88,7 +88,7 @@ $("tableview").aNewSelectorMethod();
 
 ##Including Mechanic.js
 
-Grab a copy of mechanic.js and place it alongside your UIAutomation scripts. At the top of your UIAutomation script(s), import mechanic.js:
+[Grab a copy of mechanic.js](https://github.com/downloads/jaykz52/mechanic/mechanic-0.1.0.zip) and place it alongside your UIAutomation scripts. At the top of your UIAutomation script(s), import mechanic.js:
 
 ``` js
 #import "mechanic.js"
