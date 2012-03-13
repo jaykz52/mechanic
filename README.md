@@ -8,7 +8,7 @@ You can also just use it to have fun. Want to click every button in the applicat
 
 ##Features
 
-Selecting elements with mechanic.js looks a lot like jQuery, Dojo, Zepto, etc. The followimg will select all static text elements in the element named "My Scroll View":
+Selecting elements with mechanic.js looks a lot like jQuery, Dojo, Zepto, etc. The following will select all static text elements in the element named "My Scroll View":
 
 ``` js
 $('#My Scroll View').find('UIAStaticText');
