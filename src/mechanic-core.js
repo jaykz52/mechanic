@@ -32,7 +32,6 @@ var mechanic = (function() {
         'UIAButton' : ['button'],
         'UIAElement' : ['\\*'], // TODO: sort of a hack
         'UIAImage' : ['image'],
-        'UIAImage' : ['image'],
         'UIALink' : ['link'],
         'UIAPageIndicator' : ['pageIndicator'],
         'UIAPicker' : ['picker'],
