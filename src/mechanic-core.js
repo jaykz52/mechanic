@@ -22,7 +22,7 @@ var mechanic = (function() {
         window = app.mainWindow(),
         emptyArray = [],
         slice = emptyArray.slice,
-        idSelectorRE = /^#([\w\s-]+)$/;
+        idSelectorRE = /^#([\w\s\W-]+)$/;
 
     // Setup a map of UIAElement types to their "shortcut" selectors.
     var typeShortcuts = {
