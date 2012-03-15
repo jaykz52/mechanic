@@ -100,9 +100,19 @@ mechanic("#some element name").ancestry().capture();
 ...
 ```
 
+##Building
+
+You'll need Ruby and Rake to build mechanic. Pull down the repository with git, and run rake:
+
+``` sh
+$ rake
+```
+
+This will concat all of the mechanic modules into 1 file and place it in a "dist" folder. It also outputs a minified version using Google's Closure compiler (which is not entirely important in light of the environment mechanic.js is run under).
+
 ##Feature Requests/Bugs
 
- Mechanic is not perfect. Submit bugs and feature requests if there's something that you think is missing! If you encounter bugs, please report it on mechanic's Issues page: http://github.com/jaykz52/mechanic/issues
+Mechanic is not perfect. Submit bugs and feature requests if there's something that you think is missing! If you encounter bugs, please report it on mechanic's Issues page: http://github.com/jaykz52/mechanic/issues
 
 If you've got a fix in mind, fork and submit a pull request. We need contributors!
 
