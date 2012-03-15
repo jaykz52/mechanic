@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Jasmine Spec Runner</title>
+        <link rel="stylesheet" href="jasmine/jasmine.css" type="text/css">
+    </head>
+
+    <body>
+        <script type="text/javascript" src="jasmine/jasmine.js"></script>
+        <script type="text/javascript" src="jasmine/jasmine-html.js"></script>
+        
+		<script type="text/javascript" src="uia-shim.js"></script>
+		
+		<!-- lib to test -->
+        <script type="text/javascript" src="../dist/mechanic.js"></script>
+
+        <!-- spec files -->
+        <script type="text/javascript" src="spec.js"></script>
+
+        <!-- run specs -->
+        <script type="text/javascript">
+          jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+          jasmine.getEnv().execute();
+        </script>
+    </body>
+</html>
