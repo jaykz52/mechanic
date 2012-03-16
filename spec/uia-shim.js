@@ -1,55 +1,93 @@
-function UIAElement() {
-    this.internalName = "blah";
+function extend(c, p) {
+    c.prototype = new p();
+    c.prototype.constructor = p;
+    c.prototype.toString = function() {
+        // TODO: this function is pretty awful, but we'll deal since it's just to set up a semi-accurate picture of UIAutomation as it stands
+        var parts = c.toString().match(/function\s*(\w+)/);
+        return "[object " + parts[1] + "]";
+     };
 }
-UIAElement.prototype = new Object();
-UIAElement.prototype.constructor = UIAElement;
-UIAElement.prototype.setName = function(name) { this.internalName = name; };
+
+function UIAElementArray() {}
+extend(UIAElementArray, Array);
+UIAElementArray.prototype.toArray = function() { return this; }
+
+function UIAElement() { }
+extend(UIAElement, Object);
 UIAElement.prototype.name = function(name) { 
     if (!name) return this.internalName;
     else this.internalName = name;
 };
-
+UIAElement.prototype.label = function(label) { 
+    if (!label) return this.internalLabel;
+    else this.internalLabel = label;
+};
+UIAElement.prototype.value = function(val) { 
+    if (!val) return this.internalValue;
+    else this.internalValue = val;
+};
+UIAElement.prototype.isVisible = function(val) { 
+    if (val === undefined) return this.internalVisible;
+    else this.internalVisible = val;
+};
+UIAElement.prototype.hasKeyboardFocus = function(focused) { 
+    if (focused === undefined) return this.internalFocused;
+    else this.internalFocused = focused;
+};
+UIAElement.prototype.isValid = function(val) { 
+    if (val === undefined) return this.internalValid;
+    else this.internalValid = val;
+};
+UIAElement.prototype.checkIsValid = function(val) { 
+    if (val === undefined) return this.internalCheckIsValid;
+    else this.internalCheckIsValid = val;
+};
 UIAElement.prototype.elements = function() {
-    if (!this.internalElements) {
-        this.internalElements = new UIAElementArray();
-    }
+    if (!this.internalElements) this.internalElements = new UIAElementArray();
 	return this.internalElements;
 };
-// TODO: fix toString() to match how it works in UIAutomation
 
-function UIAElementArray() {}
-UIAElementArray.prototype = new Array();
-UIAElementArray.prototype.constructor = UIAElementArray;
-UIAElementArray.prototype.toArray = function() {
-    return this;
-}
 
 function UIAWindow() {}
-UIAWindow.prototype = new UIAElement();
-UIAWindow.prototype.constructor = UIAWindow;
+extend(UIAWindow, UIAElement);
 
 function UIAScrollView() {}
-UIAScrollView.prototype = new UIAElement();
-UIAScrollView.prototype.constructor = UIAScrollView;
+extend(UIAScrollView, UIAElement);
+
+function UIATabBar() {}
+extend(UIATabBar, UIAElement);
 
 function UIAStaticText() {}
-UIAStaticText.prototype = new UIAElement();
-UIAStaticText.prototype.constructor = UIAStaticText;
+extend(UIAStaticText, UIAElement);
+
+function UIAImage() {}
+extend(UIAImage, UIAElement);
+
+function UIATableView() {}
+extend(UIATableView, UIAElement);
+
+function UIAButton() {}
+extend(UIAButton, UIAElement);
+
+function UIALink() {}
+extend(UIALink, UIAElement);
+
+function UIASwitch() {}
+extend(UIASwitch, UIAElement);
 
 function UIAApplication() {}
-UIAApplication.prototype = new UIAElement();
-UIAApplication.prototype.constructor = UIAWindow;
+extend(UIAApplication, UIAElement);
 UIAApplication.prototype.mainWindow = function() {
-	return new UIAWindow();
+    if (!this.internalMainWindow) this.internalMainWindow = new UIAWindow();
+    return this.internalMainWindow;
 };
 
 function UIATarget() {}
-UIATarget.localTarget = function() {
-	return new UIATarget();
-};
-UIATarget.prototype.frontMostApp = function() {
-	return new UIAApplication();
-};
+UIATarget.prototype.frontMostApp = function() { return new UIAApplication(); };
 UIATarget.prototype.setTimeout = function(duration) {
 	// don't do anything here
+};
+UIATarget.localTarget = function() {
+	if (!UIATarget.internalTarget) UIATarget.internalTarget = new UIATarget();
+    return UIATarget.internalTarget;
 };

@@ -11,7 +11,7 @@
         isFocused: function() { return (this.length > 0) ? this[0].hasKeyboardFocus() : false; },
         isVisible: function() { return (this.length > 0) ? this[0].isVisible() : false; },
         isValid: function(certain) {
-            if (this.length > 0) return false;
+            if (this.length != 1) return false;
             else if (certain) return this[0].checkIsValid();
             else return this[0].isValid();
         }
