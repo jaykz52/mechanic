@@ -56,7 +56,13 @@ UIAElement.prototype.dragInsideWithOptions = function(options) {};
 UIAElement.prototype.flickInsideWithOptions = function(options) {};
 UIAElement.prototype.rotateWithOptions = function(options) {};
 UIAElement.prototype.scrollToVisible = function() {};
-
+UIAElement.prototype.logElement = function() {};
+UIAElement.prototype.logElementTree = function() {};
+UIAElement.prototype.rect = function(val) {
+    if (val === undefined) return this.internalRect;
+    else this.internalRect = val;
+	
+};
 
 function UIAWindow() {}
 extend(UIAWindow, UIAElement);
@@ -94,10 +100,16 @@ UIAApplication.prototype.mainWindow = function() {
 
 function UIATarget() {}
 UIATarget.prototype.frontMostApp = function() { return new UIAApplication(); };
-UIATarget.prototype.setTimeout = function(duration) {
-	// don't do anything here
-};
+UIATarget.prototype.setTimeout = function(duration) {};
+UIATarget.prototype.captureScreenWithName = function(name) {};
+UIATarget.prototype.captureRectWithName = function(rect, name) {};
 UIATarget.localTarget = function() {
 	if (!UIATarget.internalTarget) UIATarget.internalTarget = new UIATarget();
     return UIATarget.internalTarget;
 };
+
+function UIALogger() {}
+UIALogger.logError = function (s) {}
+UIALogger.logWarning = function (s) {}
+UIALogger.logDebug = function (s) {}
+UIALogger.logMessage = function (s) {}
