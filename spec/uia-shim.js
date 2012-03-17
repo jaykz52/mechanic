@@ -8,6 +8,7 @@ function extend(c, p) {
      };
 }
 
+
 function UIAElementArray() {}
 extend(UIAElementArray, Array);
 UIAElementArray.prototype.toArray = function() { return this; }
@@ -46,6 +47,10 @@ UIAElement.prototype.elements = function() {
     if (!this.internalElements) this.internalElements = new UIAElementArray();
 	return this.internalElements;
 };
+UIAElement.prototype.tap = function() {};
+UIAElement.prototype.doubleTap = function() {};
+UIAElement.prototype.twoFingerTap = function() {};
+UIAElement.prototype.tapWithOptions = function() {};
 
 
 function UIAWindow() {}
