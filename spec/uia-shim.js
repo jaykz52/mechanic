@@ -51,6 +51,11 @@ UIAElement.prototype.tap = function() {};
 UIAElement.prototype.doubleTap = function() {};
 UIAElement.prototype.twoFingerTap = function() {};
 UIAElement.prototype.tapWithOptions = function() {};
+UIAElement.prototype.touchAndHold = function(duration) {};
+UIAElement.prototype.dragInsideWithOptions = function(options) {};
+UIAElement.prototype.flickInsideWithOptions = function(options) {};
+UIAElement.prototype.rotateWithOptions = function(options) {};
+UIAElement.prototype.scrollToVisible = function() {};
 
 
 function UIAWindow() {}
