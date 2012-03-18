@@ -108,13 +108,13 @@ You'll need Ruby and Rake to build mechanic. Pull down the repository with git, 
 $ rake
 ```
 
+This will concat all of the mechanic modules into 1 file and place it in a "dist" folder. It also outputs a minified version using Google's Closure compiler (which is not entirely important in light of the environment mechanic.js is run under).
+
 ##Testing
 
 Progress has been made in writing specs to provide test coverage for mechanic. The specs are jasmine specs, and can only currently be ran in a standalone static html file that serves as the spec runner. I'd like to get to the point where these are ran via jasmine-headless, but in the meantime you can run the tests by opening spec/runner.html in any modern browser.
 
-To add additional specs, you can either append the specs to an existing spec file (there is a spec for each module), or you can create a separate spec and add a script tag pointing to the new spec in spec/runner.html.
-
-This will concat all of the mechanic modules into 1 file and place it in a "dist" folder. It also outputs a minified version using Google's Closure compiler (which is not entirely important in light of the environment mechanic.js is run under).
+To add additional specs, you can either append the specs to an existing spec file (there is a spec for each module), or you can create a separate spec and add a script tag pointing to the new spec in spec/runner.html
 
 ##Feature Requests/Bugs
 
