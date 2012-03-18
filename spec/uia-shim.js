@@ -8,6 +8,9 @@ function extend(c, p) {
      };
 }
 
+function f(args) {
+	return new function(args) {};
+}
 
 function UIAElementArray() {}
 extend(UIAElementArray, Array);
@@ -15,38 +18,17 @@ UIAElementArray.prototype.toArray = function() { return this; }
 
 function UIAElement() { }
 extend(UIAElement, Object);
-UIAElement.prototype.name = function(name) { 
-    if (!name) return this.internalName;
-    else this.internalName = name;
-};
-UIAElement.prototype.label = function(label) { 
-    if (!label) return this.internalLabel;
-    else this.internalLabel = label;
-};
-UIAElement.prototype.value = function(val) { 
-    if (!val) return this.internalValue;
-    else this.internalValue = val;
-};
-UIAElement.prototype.isVisible = function(val) { 
-    if (val === undefined) return this.internalVisible;
-    else this.internalVisible = val;
-};
-UIAElement.prototype.hasKeyboardFocus = function(focused) { 
-    if (focused === undefined) return this.internalFocused;
-    else this.internalFocused = focused;
-};
-UIAElement.prototype.isValid = function(val) { 
-    if (val === undefined) return this.internalValid;
-    else this.internalValid = val;
-};
-UIAElement.prototype.checkIsValid = function(val) { 
-    if (val === undefined) return this.internalCheckIsValid;
-    else this.internalCheckIsValid = val;
-};
 UIAElement.prototype.elements = function() {
     if (!this.internalElements) this.internalElements = new UIAElementArray();
 	return this.internalElements;
 };
+UIAElement.prototype.name = function() {};
+UIAElement.prototype.label = function() {};
+UIAElement.prototype.value = function() {};
+UIAElement.prototype.isVisible = function() {};
+UIAElement.prototype.hasKeyboardFocus = function() {};
+UIAElement.prototype.isValid = function() {};
+UIAElement.prototype.checkIsValid = function() {};
 UIAElement.prototype.tap = function() {};
 UIAElement.prototype.doubleTap = function() {};
 UIAElement.prototype.twoFingerTap = function() {};
@@ -58,11 +40,7 @@ UIAElement.prototype.rotateWithOptions = function(options) {};
 UIAElement.prototype.scrollToVisible = function() {};
 UIAElement.prototype.logElement = function() {};
 UIAElement.prototype.logElementTree = function() {};
-UIAElement.prototype.rect = function(val) {
-    if (val === undefined) return this.internalRect;
-    else this.internalRect = val;
-	
-};
+UIAElement.prototype.rect = function(val) {};
 
 function UIAWindow() {}
 extend(UIAWindow, UIAElement);
@@ -99,7 +77,11 @@ UIAApplication.prototype.mainWindow = function() {
 };
 
 function UIATarget() {}
-UIATarget.prototype.frontMostApp = function() { return new UIAApplication(); };
+UIATarget.prototype.frontMostApp = function() { 
+    if (!this.internalApp) this.internalApp = new UIAApplication();
+    return this.internalApp;
+
+};
 UIATarget.prototype.setTimeout = function(duration) {};
 UIATarget.prototype.captureScreenWithName = function(name) {};
 UIATarget.prototype.captureRectWithName = function(rect, name) {};

@@ -18,17 +18,36 @@ describe('Mechanic Core', function() {
         expect(wrappedArray).toContain(text);
         expect(wrappedArray.length).toEqual(2);
     });
+	
+    it('uses the context passed to it to filter selection', function() {
+        var window = new UIAWindow();
+        var text1 = new UIAStaticText();
+        var scrollView = new UIAScrollView();
+        var text2 = new UIAStaticText();
+        window.elements().push(text1);
+        window.elements().push(scrollView);
+        scrollView.elements().push(text2);
+        
+        var filteredByContext = $('UIAStaticText', scrollView);
+        
+        expect(filteredByContext).toContain(text2);
+        expect(filteredByContext).toNotContain(text1);
+    });
     
     it('supports selecting by name/label', function() {
         var window = new UIAWindow();
+
         var text1 = new UIAStaticText();
-        text1.name('text1');
+		spyOn(text1, 'name').andReturn('text1');
         window.elements().push(text1);
+
         var text2 = new UIAStaticText();
-        text2.name('text2');
+		spyOn(text2, 'name').andReturn('text2');
         window.elements().push(text2);
         
+
         var byNameSelector = $('#text1', window);
+
         
         expect(byNameSelector).toContain(text1);
         expect(byNameSelector).toNotContain(text2);
@@ -60,7 +79,7 @@ describe('Mechanic Core', function() {
 	it('allows you to select elements with names/labels with special characters (closes GI-5)', function() {
 		var window = new UIAWindow();
 		var text = new UIAStaticText();
-		text.name('100% Awesome');
+		spyOn(text, 'name').andReturn('100% Awesome');
 		window.elements().push(text);
 		
 		var result = $('#100% Awesome', window);
@@ -91,21 +110,19 @@ describe('Mechanic Core', function() {
         expect(wrappedWindow.selector).toBe(window);
         expect(otherWrappedWindow.selector).toBe('window');
     });
-    
-    it('uses the context passed to it to filter selection', function() {
-        var window = new UIAWindow();
-        var text1 = new UIAStaticText();
-        var scrollView = new UIAScrollView();
-        var text2 = new UIAStaticText();
-        window.elements().push(text1);
-        window.elements().push(scrollView);
-        scrollView.elements().push(text2);
-        
-        console.log(text1.isType('UIAStaticText'));
-        
-        var filteredByContext = $('UIAStaticText', scrollView);
-        
-        expect(filteredByContext).toContain(text2);
-        expect(filteredByContext).toNotContain(text1);
-    });
+	
+	// it('uses frontMostApp as the default context', function() {
+	// 	var win = new UIAWindow();
+	// 	var tableview = new UIATableView();
+	// 	win.elements().push(tableview);
+	// 	
+	// 	var app = new UIAApplication();
+	// 	app.elements().push(win);
+	// 	spyOn(UIATarget.localTarget(), 'frontMostApp').andReturn(app);
+	// 	
+	// 	var sel = $('tableview');
+	// 	
+	// 	expect(sel[0]).toBe(tableview);
+	// 	expect(sel.length).toEqual(1);
+	// });
 });
