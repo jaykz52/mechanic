@@ -6,16 +6,17 @@
     $.extend($, {
         log: function(s, level) {
             level = level || 'message';
-            if (level === 'error') UIALogger.logError(s);
-            else if (level === 'warn') UIALogger.logWarning(s);
-            else if (level === 'debug') UIALogger.logDebug(s);
-            else UIALogger.logMessage(s);
+            if (level === 'error') $.error(s);
+            else if (level === 'warn') $.warn(s);
+            else if (level === 'debug') $.debug(s);
+            else $.message(s);
         },
-        error: function(s) { $.log(s, 'error'); },
-        warn: function(s) { $.log(s, 'warn'); },
-        debug: function(s) { $.log(s, 'debug'); },
-        message: function(s) { $.log(s, 'message'); },
+        error: function(s) { UIALogger.logError(s); },
+        warn: function(s) { UIALogger.logWarning(s); },
+        debug: function(s) { UIALogger.logDebug(s); },
+        message: function(s) { UIALogger.logMessage(s); },
         capture: function(imageName, rect) {
+			var target = UIATarget.localTarget();
             imageName = imageName || new Date().toString();
             if (rect) target.captureRectWithName(rect, imageName);
             else target.captureScreenWithName(imageName);
