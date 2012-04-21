@@ -14,7 +14,7 @@
         },
         location: function(coordinates, options) {
             options = options || {};
-            target.setLocationWithOptions(options);
+            target.setLocationWithOptions(coordinates, options);
         },
         shake: function() { target.shake(); },
         rotate: function(options) { target.rotateWithOptions(options); },
