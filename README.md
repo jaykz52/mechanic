@@ -2,7 +2,7 @@
 
 mechanic.js lets you take the power of UIAutomation with the simplicity of modern javascript CSS selector engines to make your UIAutomation scripts terse and beautiful.
 
-Use mechanic.js to trim down your iOS automation scripts or to cut out the cruft in your iOS UATs.
+Use mechanic.js to trim down your iOS automation scripts or to cut out the cruft in your iOS UATs. Not sure how to get started? Take a look at [the wiki](https://github.com/jaykz52/mechanic/wiki) for ideas!
 
 You can also just use it to have fun. Want to click every button in the application? That's one line of code with mechanic. Need to get screenshots of every table cell in your favorite UITableView? Still just one line.
 
@@ -60,7 +60,7 @@ $.prefs({
 
 ###... and more!
 
-Mechanic has many more functions to make your life in iOS automation easier. API documentation is underway, and a test coverage is also a priority. In the mean time, take a look at the source to get an idea of what mechanic has to offer.
+Mechanic has many more functions to make your life in iOS automation easier. [Read the API documentation](https://github.com/jaykz52/mechanic/wiki) to see just what all can be done with Mechanic.js!
 
 ##Extending Mechanic.js
 
