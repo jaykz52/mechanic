@@ -111,6 +111,25 @@ describe('Mechanic Core', function() {
         expect(otherWrappedWindow.selector).toBe('window');
     });
 
+    describe('pluck', function() {
+        it('captures the return values of each object when passed the name of a function', function() {
+            var scrollView = new UIAScrollView();
+            spyOn(scrollView, 'name').andReturn('name #1');
+            var text = new UIAStaticText();
+            spyOn(text, 'name').andReturn('name #2');
+
+            var sel = $([scrollView, text]);
+            var names = sel.pluck('name');
+
+            expect(scrollView.name).toHaveBeenCalled();
+            expect(text.name).toHaveBeenCalled();
+
+            expect(names.length).toBe(2);
+            expect(names[0]).toBe('name #1');
+            expect(names[1]).toBe('name #2');
+        });
+    });
+
     // it('uses frontMostApp as the default context', function() {
     // 	var win = new UIAWindow();
     // 	var tableview = new UIATableView();

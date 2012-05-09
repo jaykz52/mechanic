@@ -281,7 +281,12 @@ var mechanic = (function() {
         index: function(element) {
             return element ? this.indexOf($(element)[0]) : this.parent().elements().toArray().indexOf(this[0]);
         },
-        pluck: function(property) { return this.map(function(){ return this[property] }) }
+        pluck: function(property) {
+            return this.map(function() {
+                if (typeof this[property] == 'function') return this[property]();
+                else return this[property]
+            })
+        }
     };
 
     'filter,add,not,eq,first,last,find,closest,parents,parent,children,siblings'.split(',').forEach(function(property) {
