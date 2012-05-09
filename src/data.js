@@ -21,14 +21,14 @@
         version: function() {
             return app.version();
         },
-        bundleId: function()  {
+        bundleID: function()  {
             return app.bundleID();
         },
         prefs: function(prefsOrKey) {
             // TODO: should we handle no-arg version that returns all prefs???
-            if (typeof prefsToReturn == 'string') return app.preferencesValueForKey();
+            if (typeof prefsOrKey == 'string') return app.preferencesValueForKey(prefsOrKey);
             else {
-                $.each(prefsOrKey, function(val, key) {
+                $.each(prefsOrKey, function(key, val) {
                     app.setPreferencesValueForKey(val, key);
                 });
             }

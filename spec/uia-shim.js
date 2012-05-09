@@ -75,6 +75,18 @@ UIAApplication.prototype.mainWindow = function() {
     if (!this.internalMainWindow) this.internalMainWindow = new UIAWindow();
     return this.internalMainWindow;
 };
+UIAApplication.prototype.version = function() {
+    return 1;
+};
+UIAApplication.prototype.bundleID = function() {
+    return "bundle1234";
+};
+UIAApplication.prototype.setPreferencesValueForKey = function(val, key) {
+    // don't do anything...
+};
+UIAApplication.prototype.preferencesValueForKey = function(key) {
+    // don't do anything...
+};
 
 function UIATarget() {}
 UIATarget.prototype.frontMostApp = function() { 
