@@ -278,6 +278,18 @@ var mechanic = (function() {
                 return slice.call(el.parent().elements()).filter(function(child){ return child!==el });
             }), selector);
         },
+        next: function(selector) {
+            return filtered(this.map(function() {
+                var els = this.parent().elements().toArray();
+                return els[els.indexOf(this) + 1];
+            }), selector);
+        },
+        prev: function(selector) {
+            return filtered(this.map(function() {
+                var els = this.parent().elements().toArray();
+                return els[els.indexOf(this) - 1];
+            }), selector);
+        },        
         index: function(element) {
             return element ? this.indexOf($(element)[0]) : this.parent().elements().toArray().indexOf(this[0]);
         },
