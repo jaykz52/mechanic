@@ -9,6 +9,7 @@
         label: function() { return (this.length > 0) ? this[0].label() : null; },
         value: function() { return (this.length > 0) ? this[0].value() : null; },
         isFocused: function() { return (this.length > 0) ? this[0].hasKeyboardFocus() : false; },
+        isEnabled: function() { return (this.length > 0) ? this[0].isEnabled() : false; },
         isVisible: function() { return (this.length > 0) ? this[0].isVisible() : false; },
         isValid: function(certain) {
             if (this.length != 1) return false;

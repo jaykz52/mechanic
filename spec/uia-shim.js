@@ -25,6 +25,7 @@ UIAElement.prototype.elements = function() {
 UIAElement.prototype.name = function() {};
 UIAElement.prototype.label = function() {};
 UIAElement.prototype.value = function() {};
+UIAElement.prototype.isEnabled = function() {};
 UIAElement.prototype.isVisible = function() {};
 UIAElement.prototype.hasKeyboardFocus = function() {};
 UIAElement.prototype.isValid = function() {};

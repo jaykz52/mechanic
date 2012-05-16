@@ -66,6 +66,24 @@ describe('Mechanic Data Module', function() {
 
         expect(sel.isFocused()).toEqual(false);
     });
+    
+    it('has an isEnabled selector function that returns whether or not the first element is enabled', function() {
+        var scroll = new UIAScrollView();
+        spyOn(scroll, 'isEnabled').andReturn(true);
+        var tabbar = new UIATabBar();
+
+        var sel = $([scroll, tabbar]);
+
+        expect(sel.isEnabled()).toEqual(true);
+        expect(scroll.isEnabled).toHaveBeenCalled();
+    });
+
+    it('returns false when isEnabled is called on an empty selector', function() {
+        var sel = $();
+
+        expect(sel.isEnabled()).toEqual(false);
+    });
+    
 
     it('has an isVisible selector function that returns whether or not the first element is visible', function() {
         var scroll = new UIAScrollView();
