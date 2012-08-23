@@ -53,12 +53,12 @@ describe('Mechanic Core', function() {
         expect(byNameSelector).toNotContain(text2);
     });
 
-    $('supports selecting by type', function() {
+    it('supports selecting by type', function() {
         var window = new UIAWindow();
         var button = new UIAButton();
-        window.elements().push(tableview);
-        var tableview = new UIATableView();
         window.elements().push(button);
+        var tableview = new UIATableView();
+        window.elements().push(tableview);
 
         var byTypeSelector = $('UIAButton', window);
 
@@ -66,7 +66,7 @@ describe('Mechanic Core', function() {
         expect(byTypeSelector).toNotContain(tableview);
     });
 
-    $('allows for a number of shortcut type selectors', function() {
+    it('allows for a number of shortcut type selectors', function() {
         var link = new UIALink();
         var text = new UIAStaticText();
         var window = new UIAWindow();
@@ -129,19 +129,4 @@ describe('Mechanic Core', function() {
             expect(names[1]).toBe('name #2');
         });
     });
-
-    // it('uses frontMostApp as the default context', function() {
-    // 	var win = new UIAWindow();
-    // 	var tableview = new UIATableView();
-    // 	win.elements().push(tableview);
-    //
-    // 	var app = new UIAApplication();
-    // 	app.elements().push(win);
-    // 	spyOn(UIATarget.localTarget(), 'frontMostApp').andReturn(app);
-    //
-    // 	var sel = $('tableview');
-    //
-    // 	expect(sel[0]).toBe(tableview);
-    // 	expect(sel.length).toEqual(1);
-    // });
 });
