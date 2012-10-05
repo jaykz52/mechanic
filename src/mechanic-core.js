@@ -62,7 +62,7 @@ var mechanic = (function() {
         var typeSelectorREString = "\\";
         for (key in typeShortcuts) {
             typeSelectorREString += key + "|";
-            typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|" });
+            typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|"; });
         }
         typeSelectorREString = typeSelectorREString.substr(0, typeSelectorREString.length - 1);
         return new RegExp(typeSelectorREString);
@@ -95,15 +95,15 @@ var mechanic = (function() {
         else return false;
     };
 
-    function isF(value) { return ({}).toString.call(value) == "[object Function]" }
-    function isO(value) { return value instanceof Object }
-    function isA(value) { return value instanceof Array }
-    function likeArray(obj) { return typeof obj.length == 'number' }
+    function isF(value) { return ({}).toString.call(value) == "[object Function]"; }
+    function isO(value) { return value instanceof Object; }
+    function isA(value) { return value instanceof Array; }
+    function likeArray(obj) { return typeof obj.length == 'number'; }
 
-    function compact(array) { return array.filter(function(item){ return item !== undefined && item !== null }) }
-    function flatten(array) { return array.length > 0 ? [].concat.apply([], array) : array }
+    function compact(array) { return array.filter(function(item){ return item !== undefined && item !== null; }); }
+    function flatten(array) { return array.length > 0 ? [].concat.apply([], array) : array; }
 
-    function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index }) }
+    function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index; }); }
 
     function Z(dom, selector){
         dom = dom || emptyArray;
@@ -119,7 +119,7 @@ var mechanic = (function() {
         else {
             var dom;
             if (isA(selector)) dom = compact(selector);
-            else if (selector instanceof UIAElement) dom = [selector]
+            else if (selector instanceof UIAElement) dom = [selector];
             else dom = $$(app, selector);
             return Z(dom, selector);
         }
@@ -155,29 +155,31 @@ var mechanic = (function() {
 
     $.map = function(elements, callback) {
         var value, values = [], i, key;
-        if (likeArray(elements))
+        if (likeArray(elements)) {
             for (i = 0; i < elements.length; i++) {
                 value = callback(elements[i], i);
                 if (value != null) values.push(value);
             }
-        else
+        } else {
             for (key in elements) {
                 value = callback(elements[key], key);
                 if (value != null) values.push(value);
             }
+        }
         return flatten(values);
     };
 
     $.each = function(elements, callback) {
         var i, key;
-        if (likeArray(elements))
+        if (likeArray(elements)) {
             for(i = 0; i < elements.length; i++) {
                 if(callback.call(elements[i], i, elements[i]) === false) return elements;
             }
-        else
+        } else {
             for(key in elements) {
                 if(callback.call(elements[key], key, elements[key]) === false) return elements;
             }
+        }
         return elements;
     };
 
@@ -188,15 +190,15 @@ var mechanic = (function() {
         indexOf: emptyArray.indexOf,
         concat: emptyArray.concat,
         map: function(fn){
-            return $.map(this, function(el, i){ return fn.call(el, i, el) });
+            return $.map(this, function(el, i){ return fn.call(el, i, el); });
         },
         slice: function(){
             return $(slice.apply(this, arguments));
         },
-        get: function(idx){ return idx === undefined ? slice.call(this) : this[idx] },
-        size: function(){ return this.length },
+        get: function(idx){ return idx === undefined ? slice.call(this) : this[idx]; },
+        size: function(){ return this.length; },
         each: function(callback) {
-            this.forEach(function(el, idx){ callback.call(el, idx, el) });
+            this.forEach(function(el, idx){ callback.call(el, idx, el); });
             return this;
         },
         filter: function(selector) {
@@ -209,7 +211,7 @@ var mechanic = (function() {
             return this.prevObject || $();
         },
         andSelf:function(){
-            return this.add(this.prevObject || $())
+            return this.add(this.prevObject || $());
         },
         add:function(selector,context){
             return $(uniq(this.concat($(selector,context))));
@@ -235,12 +237,12 @@ var mechanic = (function() {
         eq: function(idx){
             return idx === -1 ? this.slice(idx) : this.slice(idx, + idx + 1);
         },
-        first: function(){ var el = this[0]; return el && !isO(el) ? el : $(el) },
-        last: function(){ var el = this[this.length - 1]; return el && !isO(el) ? el : $(el) },
+        first: function(){ var el = this[0]; return el && !isO(el) ? el : $(el); },
+        last: function(){ var el = this[this.length - 1]; return el && !isO(el) ? el : $(el); },
         find: function(selector) {
             var result;
             if (this.length == 1) result = $$(this[0], selector);
-            else result = this.map(function(){ return $$(this, selector) });
+            else result = this.map(function(){ return $$(this, selector); });
             return $(result);
         },
         predicate: function(predicate) {
@@ -268,14 +270,14 @@ var mechanic = (function() {
             return filtered(ancestors, selector);
         },
         parent: function(selector) {
-            return filtered(uniq(this.map(function() { return this.parent() })), selector);
+            return filtered(uniq(this.map(function() { return this.parent(); })), selector);
         },
         children: function(selector) {
-            return filtered(this.map(function(){ return slice.call(this.elements()) }), selector);
+            return filtered(this.map(function(){ return slice.call(this.elements()); }), selector);
         },
         siblings: function(selector) {
             return filtered(this.map(function(i, el) {
-                return slice.call(el.parent().elements()).filter(function(child){ return child!==el });
+                return slice.call(el.parent().elements()).filter(function(child){ return child!==el; });
             }), selector);
         },
         next: function(selector) {
@@ -296,8 +298,8 @@ var mechanic = (function() {
         pluck: function(property) {
             return this.map(function() {
                 if (typeof this[property] == 'function') return this[property]();
-                else return this[property]
-            })
+                else return this[property];
+            });
         }
     };
 
