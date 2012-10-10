@@ -29,7 +29,7 @@
         backgroundApp: function(duration) { target.deactivateAppForDuration(duration); },
         volume: function(direction, duration) {
             if (direction === 'up') {
-                if (duration) target.holdVolumeUp(duration)
+                if (duration) target.holdVolumeUp(duration);
                 else target.clickVolumeUp();
             } else {
                 if (duration) target.holdVolumeDown(duration);
