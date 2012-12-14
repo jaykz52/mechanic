@@ -59,6 +59,7 @@ var mechanic = (function() {
 
     // Build a RegExp for picking out type selectors.
     var typeSelectorRE = (function() {
+        var key;
         var typeSelectorREString = "\\";
         for (key in typeShortcuts) {
             typeSelectorREString += key + "|";
@@ -143,6 +144,7 @@ var mechanic = (function() {
     }
 
     $.extend = function(target){
+        var key;
         slice.call(arguments, 1).forEach(function(source) {
             for (key in source) target[key] = source[key];
         });
