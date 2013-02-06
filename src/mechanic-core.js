@@ -54,7 +54,8 @@ var mechanic = (function() {
         'UIATextView' : ['textview'],
         'UIAToolbar' : ['toolbar'],
         'UIAWebView' : ['webview'],
-        'UIAWindow' : ['window']
+        'UIAWindow' : ['window'],
+        'UIANavigationBar': ['navigationBar']
     };
 
     // Build a RegExp for picking out type selectors.
@@ -293,7 +294,7 @@ var mechanic = (function() {
                 var els = this.parent().elements().toArray();
                 return els[els.indexOf(this) - 1];
             }), selector);
-        },        
+        },
         index: function(element) {
             return element ? this.indexOf($(element)[0]) : this.parent().elements().toArray().indexOf(this[0]);
         },
