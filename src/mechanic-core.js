@@ -112,9 +112,6 @@ var mechanic = (function() {
         dom.selector = selector || '';
         if (dom === emptyArray) {
             UIALogger.logWarning("element " + selector + " have not been found");
-        } else {
-            UIALogger.logMessage("element " + selector + " found");
-            dom.log();
         }
         return dom;
     }
