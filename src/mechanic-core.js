@@ -111,6 +111,9 @@ var mechanic = (function() {
         dom = dom || emptyArray;
         dom.__proto__ = Z.prototype;
         dom.selector = selector || '';
+        if (dom === emptyArray) {
+            UIALogger.logWarning("element " + selector + " have not been found");
+        }
         return dom;
     }
 
