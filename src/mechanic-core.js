@@ -252,8 +252,36 @@ var mechanic = (function() {
         predicate: function(predicate) {
             return this.map(function(el, idx) {
                 if (typeof predicate == 'string') return el.withPredicate(predicate);
-                else return null; // TODO: handle map with key/values to match using withValueForKey
+                else return null;
             });
+        },
+        valueForKey: function(key, value) {
+            var result = this.map(function(idx, el) {
+                if (key in el && el[key]() == value) {
+                    return el;
+                }
+                return null;
+            });
+            return $(result);
+        },
+        valueInKey: function(key, val) {
+            var result = this.map(function(idx, el) {
+                if (key in el) {
+                    var elKey = el[key]();
+                    if (elKey === null) {
+                        return null;
+                    }
+                    // make this a case insensitive search
+                    elKey = elKey.toString().toLowerCase();
+                    val = val.toString().toLowerCase();
+
+                    if (elKey.indexOf(val) !== -1) {
+                        return el;
+                    }
+                }
+                return null;
+            });
+            return $(result);
         },
         closest: function(selector, context) {
             var el = this[0], candidates = $$(context || app, selector);
