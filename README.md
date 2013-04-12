@@ -90,7 +90,7 @@ $("tableview").aNewSelectorMethod();
 
 ##Including Mechanic.js
 
-[Grab a copy of mechanic.js](https://github.com/downloads/jaykz52/mechanic/mechanic-0.1.1.zip) and place it alongside your UIAutomation scripts. At the top of your UIAutomation script(s), import mechanic.js:
+[Grab a copy of mechanic.js](http://www.cozykozy.com/wp-content/uploads/2013/04/mechanic-0.2.zip) and place it alongside your UIAutomation scripts. At the top of your UIAutomation script(s), import mechanic.js:
 
 ``` js
 #import "mechanic.js"
