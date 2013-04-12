@@ -6,7 +6,7 @@ Use mechanic.js to trim down your iOS automation scripts or to cut out the cruft
 
 You can also just use it to have fun. Want to click every button in the application? That's one line of code with mechanic. Need to get screenshots of every table cell in your favorite UITableView? Still just one line.
 
-[Download mechanic.js](https://github.com/downloads/jaykz52/mechanic/mechanic-0.1.1.zip) and give it a try!
+[Download mechanic.js](http://www.cozykozy.com/wp-content/uploads/2013/04/mechanic-0.2.zip) and give it a try!
 
 ##Features
 
