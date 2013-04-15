@@ -124,7 +124,7 @@ If you've got a fix in mind, fork and submit a pull request. We need contributor
 
 ##Contributing
 
-The project is currently in its infancy (~ 1 week old!). We need API documentation, additional features, and test coverage (!!!), so feel free to get in touch via github, or just start submitting patches! Try to keep patches to single issues, this will make our lives easier in the long term.
+The project is currently in its infancy. We need API documentation, additional features, and test coverage (!!!), so feel free to get in touch via github, or just start submitting patches! Try to keep patches to single issues, this will make our lives easier in the long term. If you or your organization is interested in adopting mechanic.js and have questions, feel free to contact Jason at jason.kozemcak@gmail.com
 
 ##License
 
