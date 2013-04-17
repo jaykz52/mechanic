@@ -68,34 +68,34 @@ var mechanic = (function() {
         }
         return typeSelectorREString.substr(0, typeSelectorREString.length - 1);
     })();
+
     var typeSelectorRE = new RegExp(typeSelectorREString);
 
-    var E_namePattern = "[^,\\[\\]]+"
-    var E_patterns = {
-      simple:          (new RegExp("^#("+E_namePattern+")$"))
+    var patternName = "[^,\\[\\]]+"
+
+    var selectorPatterns = {
+      simple:          (new RegExp("^#("+patternName+")$"))
      ,byType:          (new RegExp("^("+typeSelectorREString+")$"))
-     ,byName:          (new RegExp("^\\[name=("+E_namePattern+")\\]$"))
-     ,byTypeAndName:   (new RegExp("^("+typeSelectorREString+")\\[name=("+E_namePattern+")\\]$"))
+     ,byName:          (new RegExp("^\\[name=("+patternName+")\\]$"))
+     ,byTypeAndName:   (new RegExp("^("+typeSelectorREString+")\\[name=("+patternName+")\\]$"))
      ,children:        (new RegExp("^(.*) > (.*)$"))
      ,descendents:     (new RegExp("^([^#]+) +([^#]+)$"))
     }
-    var E_searches = {
+
+    var searches = {
       simple:          function(name)         { return this.getElementsByName(name)  }
      ,byType:          function(type)         { return this.getElementsByType(type)  }
      ,byName:          function(name)         { return this.getElementsByName(name)  }
-     ,byTypeAndName:   function(type,name)    { return $$(this, type).filter('#'+name) }
-     ,children:        function(parent,child) { return $.E_search(parent, this).children().filter(child)                             }
+     ,byTypeAndName:   function(type,name)    { return $(type, this).filter('#'+name) }
+     ,children:        function(parent,child) { return $(parent, this).children().filter(child)                             }
      ,descendents:     function(parent,child) { return $(child, $(parent, this))     }
     }
-    var E_filters = {
-       simple:        function(name)      { return '#'+this.name() == name }
-      ,byType:        function(type)      { return this.isType(type) }
-      ,byName:        function(name)      { return this.name() == name }
-      ,byTypeAndName: function(type,name) {
-        return $$(this, type).map(function() {
-          return this.name() == name.name ? this : null
-        })
-      }
+
+    var filters = {
+       simple:        function(name)      { return '#'+this.name() == name           }
+      ,byType:        function(type)      { return this.isType(type)                 }
+      ,byName:        function(name)      { return this.name() == name               }
+      ,byTypeAndName: function(type,name) { return $(type, this).filter('#'+name)   }
     }
 
 
@@ -159,44 +159,20 @@ var mechanic = (function() {
     function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index; }); }
 
     $.qsa = $$ = function(element, selector) {
-        var ret = []
-        $.each(selector.split(/ *, */), function() {
-          $.each($.E_search(this, element), function() {
-            ret.push(this)
-          })
+        var ret = [],
+            groups = selector.split(/ *, */),
+            matches
+        $.each(groups, function() {
+          for (type in searches) {
+            if (matches = this.match(selectorPatterns[type])) {
+              matches.shift()
+              ret = ret.concat($(searches[type].apply(element, matches)))
+              break
+            }
+          }
         })
         return $(ret)
-        //if (idSelectorRE.test(selector)) {
-        //    return element.getElementsByName(selector.substr(1));
-        //} else if (typeSelectorRE.test(selector)) {
-        //    found = element.getElementsByType(selector);
-        //    return found ? found : emptyArray;
-        //} else {
-        //    return emptyArray;
-        //}
     };
-
-    $.E_search = function(selector, context) {
-      var matches
-      for (type in E_searches) {
-        console.log(type,selector, selector.match(E_patterns[type]))
-        if (matches = selector.match(E_patterns[type])) {
-          matches.shift() // remove the original string, we only want the capture groups
-          return $(E_searches[type].apply(context, matches))
-        }
-      }
-    }
-
-    $.E_search = function(selector, context) {
-      var matches
-      for (type in E_searches) {
-        console.log(type,selector, selector.match(E_patterns[type]))
-        if (matches = selector.match(E_patterns[type])) {
-          matches.shift() // remove the original string, we only want the capture groups
-          return $(E_searches[type].apply(context, matches))
-        }
-      }
-    }
 
     function filtered(elements, selector) {
         return selector === undefined ? $(elements) : $(elements).filter(selector);
@@ -264,11 +240,11 @@ var mechanic = (function() {
         },
         filter: function(selector) {
           var matches
-          for (type in E_filters) {
-            if (matches = selector.match(E_patterns[type])) {
+          for (type in filters) {
+            if (matches = selector.match(selectorPatterns[type])) {
               matches.shift() // remove the original string, we only want the capture groups
               return $.map(this, function(e) {
-                return E_filters[type].apply(e, matches) ? e : null
+                return filters[type].apply(e, matches) ? e : null
               })
             }
           }
