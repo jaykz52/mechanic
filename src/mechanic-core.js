@@ -59,17 +59,44 @@ var mechanic = (function() {
     };
 
     // Build a RegExp for picking out type selectors.
-    var typeSelectorRE = (function() {
+    var typeSelectorREString = (function() {
         var key;
         var typeSelectorREString = "\\";
         for (key in typeShortcuts) {
             typeSelectorREString += key + "|";
             typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|"; });
         }
-        typeSelectorREString = typeSelectorREString.substr(0, typeSelectorREString.length - 1);
-        return new RegExp(typeSelectorREString);
+        return typeSelectorREString.substr(0, typeSelectorREString.length - 1);
     })();
+    var typeSelectorRE = new RegExp(typeSelectorREString);
 
+var E_namePattern = "[^,\\[\\]]+"
+var E_patterns = {
+  simple:          (new RegExp("^#("+E_namePattern+")$"))
+ ,byType:          (new RegExp("^("+typeSelectorREString+")$"))
+ ,byName:          (new RegExp("^\\[name=("+E_namePattern+")\\]$"))
+ ,byTypeAndName:   (new RegExp("^("+typeSelectorREString+")\\[name=("+E_namePattern+")\\]$"))
+ ,children:        (new RegExp("^(.*) > (.*)$"))
+ ,descendents:     (new RegExp("^([^#]+) +([^#]+)$"))
+}
+var E_searches = {
+  simple:          function(name)         { return this.getElementsByName(name)  }
+ ,byType:          function(type)         { return this.getElementsByType(type)  }
+ ,byName:          function(name)         { return this.getElementsByName(name)  }
+ ,byTypeAndName:   function(type,name)    { return $.E_filter('#'+name, $$(this, type)) }
+ ,children:        function(parent,child) { return $.E_filter(child, $.E_search(parent, this).children())                             }
+ ,descendents:     function(parent,child) { return $(child, $(parent, this))     }
+}
+var E_filters = {
+   simple:        function(name)      { return '#'+this.name() == name }
+  ,byType:        function(type)      { return this.isType(type) }
+  ,byName:        function(name)      { return this.name() == name }
+  ,byTypeAndName: function(type,name) {
+    return $$(this, type).map(function() {
+      return this.name() == name.name ? this : null
+    })
+  }
+}
     // Add functions to UIAElement to make object graph searching easier.
     UIAElement.prototype.getElementsByName = function(name) {
         var foundEls = [];
@@ -128,17 +155,45 @@ var mechanic = (function() {
             return Z(dom, selector);
         }
     }
+$.E_search = function(selector, context) {
+  var matches
+  for (type in E_searches) {
+    console.log(type,selector, selector.match(E_patterns[type]))
+    if (matches = selector.match(E_patterns[type])) {
+      matches.shift() // remove the original string, we only want the capture groups
+      return $(E_searches[type].apply(context, matches))
+    }
+  }
+}
+
+$.E_filter = function(selector, context) {
+  var matches
+  for (type in E_filters) {
+    if (matches = selector.match(E_patterns[type])) {
+      matches.shift() // remove the original string, we only want the capture groups
+      return $.map(context, function(e) {
+        return E_filters[type].apply(e, matches) ? e : null
+      })
+    }
+  }
+}
 
     $.qsa = $$ = function(element, selector) {
-        var found;
-        if (idSelectorRE.test(selector)) {
-            return element.getElementsByName(selector.substr(1));
-        } else if (typeSelectorRE.test(selector)) {
-            found = element.getElementsByType(selector);
-            return found ? found : emptyArray;
-        } else {
-            return emptyArray;
-        }
+        var ret = []
+        $.each(selector.split(/ *, */), function() {
+          $.each($.E_search(this, element), function() {
+            ret.push(this)
+          })
+        })
+        return $(ret)
+        //if (idSelectorRE.test(selector)) {
+        //    return element.getElementsByName(selector.substr(1));
+        //} else if (typeSelectorRE.test(selector)) {
+        //    found = element.getElementsByType(selector);
+        //    return found ? found : emptyArray;
+        //} else {
+        //    return emptyArray;
+        //}
     };
 
     function filtered(elements, selector) {
