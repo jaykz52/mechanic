@@ -80,19 +80,19 @@ var mechanic = (function() {
     }
 
     var searches = {
-      simple:          function(name)         { return this.getElementsByName(name)  }
-     ,byType:          function(type)         { return this.getElementsByType(type)  }
-     ,byName:          function(name)         { return this.getElementsByName(name)  }
-     ,byTypeAndName:   function(type,name)    { return $(type, this).filter('#'+name) }
-     ,children:        function(parent,child) { return $(parent, this).children().filter(child)                             }
-     ,descendents:     function(parent,child) { return $(child, $(parent, this))     }
+      simple:          function(name)         { return this.getElementsByName(name)          }
+     ,byType:          function(type)         { return this.getElementsByType(type)          }
+     ,byName:          function(name)         { return this.getElementsByName(name)          }
+     ,byTypeAndName:   function(type,name)    { return $(type, this).filter('#'+name)        }
+     ,children:        function(parent,child) { return $(parent, this).children().filter(child) }
+     ,descendents:     function(parent,child) { return $(child, $(parent, this))             }
     }
 
     var filters = {
-       simple:        function(name)      { return '#'+this.name() == name           }
-      ,byType:        function(type)      { return this.isType(type)                 }
-      ,byName:        function(name)      { return this.name() == name               }
-      ,byTypeAndName: function(type,name) { return $(type, this).filter('#'+name)   }
+       simple:        function(name)      { return this.name() == name                       }
+      ,byType:        function(type)      { return this.isType(type)                         }
+      ,byName:        function(name)      { return this.name() == name                       }
+      ,byTypeAndName: function(type,name) { return this.isType(type) && this.name() == name  }
     }
 
 
