@@ -21,8 +21,7 @@ var mechanic = (function() {
     var app = target.frontMostApp(),
         window = app.mainWindow(),
         emptyArray = [],
-        slice = emptyArray.slice,
-        idSelectorRE = /^#([\w\s\W-]+)$/;
+        slice = emptyArray.slice
 
     // Setup a map of UIAElement types to their "shortcut" selectors.
     var typeShortcuts = {
@@ -68,8 +67,6 @@ var mechanic = (function() {
         }
         return typeSelectorREString.substr(0, typeSelectorREString.length - 1);
     })();
-
-    var typeSelectorRE = new RegExp(typeSelectorREString);
 
     var patternName = "[^,\\[\\]]+"
 
