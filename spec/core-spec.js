@@ -53,6 +53,25 @@ describe('Mechanic Core', function() {
         expect(byNameSelector).toNotContain(text2);
     });
 
+    it('supports selecting by name using longform', function() {
+        var window = new UIAWindow();
+
+        var text1 = new UIAStaticText();
+        spyOn(text1, 'name').andReturn('text 1');
+        window.elements().push(text1);
+
+        var text2 = new UIAStaticText();
+        spyOn(text2, 'name').andReturn('text 2');
+        window.elements().push(text2);
+
+
+        var byNameSelector = $('[name=text 1]', window);
+
+
+        expect(byNameSelector).toContain(text1);
+        expect(byNameSelector).toNotContain(text2);
+    })
+
     it('supports selecting by type', function() {
         var window = new UIAWindow();
         var button = new UIAButton();
@@ -75,6 +94,98 @@ describe('Mechanic Core', function() {
 
         var byTypeShortcutSel = $('link', window);
     });
+
+    it('allows you to select multiple element groups at once', function() {
+        var window = new UIAWindow();
+        var text1 = new UIAStaticText();
+        var text2 = new UIAStaticText();
+        var button1 = new UIAButton();
+        var button2 = new UIAButton();
+        spyOn(text1, 'name').andReturn('text 1');
+        spyOn(text2, 'name').andReturn('text 2');
+        spyOn(button1, 'name').andReturn('button 1');
+        spyOn(button2, 'name').andReturn('button 2');
+        window.elements().push(text1);
+        window.elements().push(text2);
+        window.elements().push(button1);
+        window.elements().push(button2);
+
+        var result = $('#button 1, [name=text 2]', window);
+        console.log('test result', result)
+        expect(result[0]).toBe(button1);
+        expect(result[1]).toBe(text2);
+        expect(result.length).toEqual(2);
+    });
+
+    it('allows you to select elements that are the children of another selector', function() {
+      // window
+      //   image#image1
+      //   button#button1
+      //   link#link1
+      //   navigationBar#navbar1
+      //     button#button2
+      //     link#link2
+      //   navigationBar#navbar2
+      //     link#link3
+      //     text#text1
+      //     tabbar#navbar3
+      //       button#button3
+      //       link#link4
+      var window = new UIAWindow()
+      var image1 = new UIAImage()
+      var button1 = new UIAButton()
+      var link1 = new UIALink()
+      var navigationBar1 = new UIANavigationBar()
+      var button2 = new UIAButton()
+      var link2 = new UIALink()
+      var navigationBar2 = new UIANavigationBar()
+      var link3 = new UIALink()
+      var text1 = new UIAStaticText()
+      var tabbar1 = new UIATabBar()
+      var button3 = new UIAButton()
+      var link4 = new UIALink()
+
+      window.elements().push(image1)
+      window.elements().push(button1)
+      window.elements().push(link1)
+      window.elements().push(navigationBar1)
+      window.elements().push(navigationBar2)
+      navigationBar1.elements().push(button2)
+      navigationBar1.elements().push(link2)
+      navigationBar2.elements().push(link3)
+      navigationBar2.elements().push(text1)
+      navigationBar2.elements().push(tabbar1)
+      tabbar1.elements().push(button3)
+      tabbar1.elements().push(link4)
+
+      var found
+
+      found = $("navigationBar > link", window)
+      expect(found[0]).toBe(link2)
+      expect(found[1]).toBe(link3)
+      expect(found.length).toBe(2)
+
+      found = $("navigationBar > button[name=2]", window)
+      expect(found.length).toBe(1)
+      expect(found[0]).toBe(button2)
+
+      found = $("navigationBar > link", window)
+      expect(found[0]).toBe(link2)
+      expect(found[1]).toBe(link3)
+      expect(found.length).toBe(2)
+
+      found = $("tabbar > *", window)
+      expect(found[0]).toBe(button3)
+      expect(found[1]).toBe(link4)
+      expect(found.length).toBe(2)
+
+      // without the ">", depth is unlimited
+      found = $("navigationBar link", window)
+      expect(found[0]).toBe(link2)
+      expect(found[1]).toBe(link3)
+      expect(found[2]).toBe(link4)
+      expect(found.length).toBe(3)
+    })
 
     it('allows you to select elements with names/labels with special characters (closes GI-5)', function() {
         var window = new UIAWindow();

@@ -10,16 +10,30 @@ You can also just use it to have fun. Want to click every button in the applicat
 
 ##Features
 
-Selecting elements with mechanic.js looks a lot like jQuery, Dojo, Zepto, etc. The following will select all static text elements in the element named "My Scroll View":
+Selecting elements with mechanic.js looks a lot like jQuery, Dojo,
+Zepto, etc. The following will select all `UIAStaticText` elements in the element named "My Scroll View":
 
 ``` js
-$('#My Scroll View').find('UIAStaticText');
+$('[name=My Scroll View] text');
 ```
 
-Mechanic provides selector shortcuts to remove some of the verbosity in selecting elements by type. The same elements could be selected with the following line:
+Mechanic provides selector shortcuts to remove some of the verbosity in
+selecting elements by type. If you know the name of the element you want
+to use you can prepend the name with `#`:
 
 ``` js
-$('#My Scroll View').find('text');
+$('#My Scroll View');
+```
+
+More complex CSS-style selectors are also supported:
+
+``` js
+// all UIAStaticText elements directly descended from a tabbar
+$('tabbar > text');
+// all buttons inside the window named 'Main'
+$('window[name=Main] button')
+// all buttons plus a specific element by name
+$('button, #Continue')
 ```
 
 If you've already got a hold of the instances you care about, they can be passed into mechanic, giving them all the benefits of mechanic:
@@ -41,7 +55,7 @@ Many of the utility functions are also tagged onto the selector implementation t
 
 ``` js
 $.delay(5);
-$('#trip table').find('cell')
+$('[name=trip table] cell')
 	.capture()
 	.delay(5)
 	.parent().log();
