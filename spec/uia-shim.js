@@ -52,6 +52,9 @@ extend(UIAScrollView, UIAElement);
 function UIATabBar() {}
 extend(UIATabBar, UIAElement);
 
+function UIANavigationBar() {}
+extend(UIANavigationBar, UIAElement);
+
 function UIAStaticText() {}
 extend(UIAStaticText, UIAElement);
 
