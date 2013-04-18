@@ -72,6 +72,26 @@ describe('Mechanic Core', function() {
         expect(byNameSelector).toNotContain(text2);
     })
 
+    it('supports selecting by value', function() {
+        var window = new UIAWindow();
+
+        var text1 = new UIATextField();
+        spyOn(text1, 'name').andReturn('text 1');
+        spyOn(text1, 'value').andReturn('First Name');
+        window.elements().push(text1);
+
+        var text2 = new UIAStaticText();
+        spyOn(text2, 'name').andReturn('text 2');
+        spyOn(text2, 'value').andReturn('Last Name');
+        window.elements().push(text2);
+
+
+        var byValueSelector = $('[value=First Name]', window);
+
+        expect(byValueSelector).toContain(text1);
+        expect(byValueSelector).toNotContain(text2);
+    })
+
     it('supports selecting by type', function() {
         var window = new UIAWindow();
         var button = new UIAButton();

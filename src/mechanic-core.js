@@ -65,7 +65,7 @@ var mechanic = (function() {
             typeSelectorREString += key + "|";
             typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|"; });
         }
-        return typeSelectorREString.substr(0, typeSelectorREString.length - 1);
+        return typeSelectorREString.substr(1, typeSelectorREString.length - 2);
     })();
 
     var patternName = "[^,\\[\\]]+"
@@ -73,17 +73,17 @@ var mechanic = (function() {
     var selectorPatterns = {
       simple:          (new RegExp("^#("+patternName+")$"))
      ,byType:          (new RegExp("^("+typeSelectorREString+")$"))
-     ,byName:          (new RegExp("^\\[name=("+patternName+")\\]$"))
-     ,byTypeAndName:   (new RegExp("^("+typeSelectorREString+")\\[name=("+patternName+")\\]$"))
+     ,byAttr:          (new RegExp("^\\[(\\w+)=("+patternName+")\\]$"))
+     ,byTypeAndAttr:   (new RegExp("^("+typeSelectorREString+")\\[(\\w+)=("+patternName+")\\]$"))
      ,children:        (new RegExp("^(.*) > (.*)$"))
-     ,descendents:     (new RegExp("^([^#]+) +([^#]+)$"))
+     ,descendents:     (new RegExp("^(.+) +(.+)$"))
     }
 
     var searches = {
       simple:          function(name)         { return this.getElementsByName(name)          }
      ,byType:          function(type)         { return this.getElementsByType(type)          }
-     ,byName:          function(name)         { return this.getElementsByName(name)          }
-     ,byTypeAndName:   function(type,name)    { return $(type, this).filter('#'+name)        }
+     ,byAttr:          function(attr,value)   { return this.getElementsByAttr(attr,value)    }
+     ,byTypeAndAttr:   function(type,a,v)     { return $(type, this).filter('['+a+'='+v+']') }
      ,children:        function(parent,child) { return $(parent, this).children().filter(child) }
      ,descendents:     function(parent,child) { return $(child, $(parent, this))             }
     }
@@ -91,8 +91,8 @@ var mechanic = (function() {
     var filters = {
        simple:        function(name)      { return this.name() == name                       }
       ,byType:        function(type)      { return this.isType(type)                         }
-      ,byName:        function(name)      { return this.name() == name                       }
-      ,byTypeAndName: function(type,name) { return this.isType(type) && this.name() == name  }
+      ,byAttr:        function(attr,value){ return this[attr] && this[attr]() == value       }
+      ,byTypeAndAttr: function(type,a,v ) { return this.isType(type) && this[a]() == v  }
     }
 
 
@@ -119,16 +119,37 @@ var mechanic = (function() {
         }
     }
 
+    $.qsa = $$ = function(element, selector) {
+        var ret = [],
+            groups = selector.split(/ *, */),
+            matches
+        $.each(groups, function() {
+          for (type in searches) {
+            if (matches = this.match(selectorPatterns[type])) {
+              matches.shift()
+              ret = ret.concat($(searches[type].apply(element, matches)))
+              break
+            }
+          }
+        })
+        return $(ret)
+    };
+
     // Add functions to UIAElement to make object graph searching easier.
     UIAElement.prototype.getElementsByName = function(name) {
-        var foundEls = [];
-        $.each(this.elements().toArray(), function(idx, el) {
-            if (el.name() === name) foundEls.push(el);
-            else foundEls = foundEls.concat(el.getElementsByName(name));
-        });
-
-        return foundEls;
+        return this.getElementsByAttr('name', name)
     };
+
+    UIAElement.prototype.getElementsByAttr = function(attr, value) {
+        return $.map(this.elements().toArray(), function(el) {
+            var matches = el.getElementsByAttr(attr, value),
+                val = el[attr]
+            if (typeof val == 'function') val = val.apply(el)
+            if (typeof val != 'undefined' && val == value)
+              matches.push(el)
+            return matches
+        })
+    }
     UIAElement.prototype.getElementsByType = function(type) {
         return $.map(this.elements().toArray(), function(el) {
             var matches = el.getElementsByType(type);
@@ -154,22 +175,6 @@ var mechanic = (function() {
     function flatten(array) { return array.length > 0 ? [].concat.apply([], array) : array; }
 
     function uniq(array) { return array.filter(function(item,index,array){ return array.indexOf(item) == index; }); }
-
-    $.qsa = $$ = function(element, selector) {
-        var ret = [],
-            groups = selector.split(/ *, */),
-            matches
-        $.each(groups, function() {
-          for (type in searches) {
-            if (matches = this.match(selectorPatterns[type])) {
-              matches.shift()
-              ret = ret.concat($(searches[type].apply(element, matches)))
-              break
-            }
-          }
-        })
-        return $(ret)
-    };
 
     function filtered(elements, selector) {
         return selector === undefined ? $(elements) : $(elements).filter(selector);
