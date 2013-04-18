@@ -32,6 +32,8 @@ More complex CSS-style selectors are also supported:
 $('tabbar > text');
 // all buttons inside the window named 'Main'
 $('window[name=Main] button')
+// the text field with a value of 'Search'
+$('textfield[value=Search]')
 // all buttons plus a specific element by name
 $('button, #Continue')
 ```
