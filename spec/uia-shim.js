@@ -70,6 +70,9 @@ extend(UIATableView, UIAElement);
 function UIAButton() {}
 extend(UIAButton, UIAElement);
 
+function UIACollectionView() {}
+extend(UIACollectionView, UIAElement);
+
 function UIALink() {}
 extend(UIALink, UIAElement);
 
@@ -96,7 +99,7 @@ UIAApplication.prototype.preferencesValueForKey = function(key) {
 };
 
 function UIATarget() {}
-UIATarget.prototype.frontMostApp = function() { 
+UIATarget.prototype.frontMostApp = function() {
     if (!this.internalApp) this.internalApp = new UIAApplication();
     return this.internalApp;
 

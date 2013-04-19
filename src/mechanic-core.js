@@ -29,6 +29,7 @@ var mechanic = (function() {
         'UIAActivityIndicator' : ['activityIndicator'],
         'UIAAlert' : ['alert'],
         'UIAButton' : ['button'],
+        'UIACollectionView' : ['collection'],
         'UIAElement' : ['\\*'], // TODO: sort of a hack
         'UIAImage' : ['image'],
         'UIALink' : ['link'],
@@ -40,7 +41,7 @@ var mechanic = (function() {
         'UIAScrollView' : ['scrollview'],
         'UIASearchBar' : ['searchbar'],
         'UIASecureTextField' : ['secure'],
-        'UIASegmentedControl' : ['segemented'],
+        'UIASegmentedControl' : ['segmented'],
         'UIASlider' : ['slider'],
         'UIAStaticText' : ['text'],
         'UIAStatusBar' : ['statusbar'],
