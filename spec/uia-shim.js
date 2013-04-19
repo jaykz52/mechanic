@@ -58,6 +58,9 @@ extend(UIANavigationBar, UIAElement);
 function UIAStaticText() {}
 extend(UIAStaticText, UIAElement);
 
+function UIATextField() {}
+extend(UIATextField, UIAElement);
+
 function UIAImage() {}
 extend(UIAImage, UIAElement);
 
