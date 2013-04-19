@@ -111,7 +111,6 @@ describe('Mechanic Core', function() {
         window.elements().push(button2);
 
         var result = $('#button 1, [name=text 2]', window);
-        console.log('test result', result)
         expect(result[0]).toBe(button1);
         expect(result[1]).toBe(text2);
         expect(result.length).toEqual(2);

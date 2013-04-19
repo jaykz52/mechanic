@@ -107,7 +107,7 @@ UIATarget.localTarget = function() {
 };
 
 function UIALogger() {}
-UIALogger.logError = function (s) {}
-UIALogger.logWarning = function (s) {}
-UIALogger.logDebug = function (s) {}
-UIALogger.logMessage = function (s) {}
+UIALogger.logError = function (s) { console.log(s); }
+UIALogger.logWarning = UIALogger.logError;
+UIALogger.logDebug = UIALogger.logError;
+UIALogger.logMessage = UIALogger.logError;
