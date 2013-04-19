@@ -72,6 +72,26 @@ describe('Mechanic Core', function() {
         expect(byNameSelector).toNotContain(text2);
     })
 
+    it('supports selecting by value', function() {
+        var window = new UIAWindow();
+
+        var text1 = new UIATextField();
+        spyOn(text1, 'name').andReturn('text 1');
+        spyOn(text1, 'value').andReturn('First Name');
+        window.elements().push(text1);
+
+        var text2 = new UIAStaticText();
+        spyOn(text2, 'name').andReturn('text 2');
+        spyOn(text2, 'value').andReturn('Last Name');
+        window.elements().push(text2);
+
+
+        var byValueSelector = $('[value=First Name]', window);
+
+        expect(byValueSelector).toContain(text1);
+        expect(byValueSelector).toNotContain(text2);
+    })
+
     it('supports selecting by type', function() {
         var window = new UIAWindow();
         var button = new UIAButton();
@@ -132,17 +152,29 @@ describe('Mechanic Core', function() {
       //       link#link4
       var window = new UIAWindow()
       var image1 = new UIAImage()
+      spyOn(image1, 'name').andReturn('image1')
       var button1 = new UIAButton()
+      spyOn(button1, 'name').andReturn('button1')
       var link1 = new UIALink()
+      spyOn(link1, 'name').andReturn('link1')
       var navigationBar1 = new UIANavigationBar()
+      spyOn(navigationBar1, 'name').andReturn('navigationBar1')
       var button2 = new UIAButton()
+      spyOn(button2, 'name').andReturn('button2')
       var link2 = new UIALink()
+      spyOn(link2, 'name').andReturn('link2')
       var navigationBar2 = new UIANavigationBar()
+      spyOn(navigationBar2, 'name').andReturn('navigationBar2')
       var link3 = new UIALink()
+      spyOn(link3, 'name').andReturn('link3')
       var text1 = new UIAStaticText()
+      spyOn(text1, 'name').andReturn('text1')
       var tabbar1 = new UIATabBar()
+      spyOn(tabbar1, 'name').andReturn('tabbar1')
       var button3 = new UIAButton()
+      spyOn(button3, 'name').andReturn('button3')
       var link4 = new UIALink()
+      spyOn(link4, 'name').andReturn('link4')
 
       window.elements().push(image1)
       window.elements().push(button1)
@@ -164,9 +196,9 @@ describe('Mechanic Core', function() {
       expect(found[1]).toBe(link3)
       expect(found.length).toBe(2)
 
-      found = $("navigationBar > button[name=2]", window)
+      found = $("navigationBar > link[name=link3]", window)
       expect(found.length).toBe(1)
-      expect(found[0]).toBe(button2)
+      expect(found[0]).toBe(link3)
 
       found = $("navigationBar > link", window)
       expect(found[0]).toBe(link2)
