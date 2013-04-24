@@ -121,6 +121,7 @@ var mechanic = (function() {
     }
 
     $.qsa = $$ = function(element, selector) {
+        return Slick.search(element, selector);
         var ret = [],
             groups = selector.split(/ *, */),
             matches
