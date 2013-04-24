@@ -82,7 +82,7 @@ var mechanic = (function() {
 
     var searches = {
       simple:          function(name)         { return this.getElementsByName(name)          }
-     ,byType:          function(type)         { return this.getElementsByType(type)          }
+     ,byType:          function(type)         { return this.getElementsByTagName(type)          }
      ,byAttr:          function(attr,value)   { return this.getElementsByAttr(attr,value)    }
      ,byTypeAndAttr:   function(type,a,v)     { return $(type, this).filter('['+a+'='+v+']') }
      ,children:        function(parent,child) { return $(parent, this).children().filter(child) }
@@ -141,7 +141,16 @@ var mechanic = (function() {
     UIAElement.prototype.getElementsByName = function(name) {
         return this.getElementsByAttr('name', name)
     };
-
+    UIAElement.prototype.getElementsById = UIAElement.prototype.getElementsByName;
+    UIAElement.prototype.setAttribute = function(attr, val) {
+      this[attr] = val;
+    };
+    UIAElement.prototype.getAttribute = function(attr) {
+      var val = this[attr];
+      if (typeof val == 'function') return val.apply(this);
+      else if (typeof val != 'undefined') return val;
+      else return null;
+    };
     UIAElement.prototype.getElementsByAttr = function(attr, value) {
         return $.map(this.elements().toArray(), function(el) {
             var matches = el.getElementsByAttr(attr, value),
@@ -152,9 +161,9 @@ var mechanic = (function() {
             return matches
         })
     }
-    UIAElement.prototype.getElementsByType = function(type) {
+    UIAElement.prototype.getElementsByTagName = function(type) {
         return $.map(this.elements().toArray(), function(el) {
-            var matches = el.getElementsByType(type);
+            var matches = el.getElementsByTagName(type);
             if (el.isType(type)) matches.unshift(el);
             return matches;
         });
