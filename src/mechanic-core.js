@@ -30,6 +30,7 @@ var mechanic = (function() {
         'UIAAlert' : ['alert'],
         'UIAButton' : ['button'],
         'UIACollectionView' : ['collection'],
+        'UIAEditingMenu': ['editingMenu'],
         'UIAElement' : ['\\*'], // TODO: sort of a hack
         'UIAImage' : ['image'],
         'UIALink' : ['link'],
