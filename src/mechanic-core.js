@@ -146,7 +146,7 @@ var mechanic = (function() {
     };
 
     UIAElement.prototype.getElementsByAttr = function(attr, value) {
-        return $.map(this.elements().toArray(), function(el) {
+        return $.map(this.elements(), function(el) {
             var matches = el.getElementsByAttr(attr, value),
                 val = el[attr]
             if (typeof val == 'function') val = val.apply(el)
@@ -156,7 +156,7 @@ var mechanic = (function() {
         })
     }
     UIAElement.prototype.getElementsByType = function(type) {
-        return $.map(this.elements().toArray(), function(el) {
+        return $.map(this.elements(), function(el) {
             var matches = el.getElementsByType(type);
             if (el.isType(type)) matches.unshift(el);
             return matches;
