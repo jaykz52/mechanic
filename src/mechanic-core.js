@@ -18,6 +18,9 @@ var mechanic = (function() {
     // Developers can adjust this value by calling $.timeout(duration)
     target.setTimeout(0);
 
+    // This property is meant to suppress excessive logging which prevents instruments from promptly dumping out screenshots.
+    this.isVerbose = false
+
     var app = target.frontMostApp(),
         window = app.mainWindow(),
         emptyArray = [],

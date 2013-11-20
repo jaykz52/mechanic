@@ -8,15 +8,17 @@
             level = level || 'message';
             if (level === 'error') $.error(s);
             else if (level === 'warn') $.warn(s);
-            else if (level === 'debug') $.debug(s);
-            else $.message(s);
+            else if (typeof $.isVerbose !== "undefined" && $.isVerbose) {
+                if (level === 'debug') $.debug(s);
+                else $.message(s);
+            }
         },
         error: function(s) { UIALogger.logError(s); },
         warn: function(s) { UIALogger.logWarning(s); },
         debug: function(s) { UIALogger.logDebug(s); },
         message: function(s) { UIALogger.logMessage(s); },
         capture: function(imageName, rect) {
-			var target = UIATarget.localTarget();
+            var target = UIATarget.localTarget();
             imageName = imageName || new Date().toString();
             if (rect) target.captureRectWithName(rect, imageName);
             else target.captureScreenWithName(imageName);
