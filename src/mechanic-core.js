@@ -37,6 +37,7 @@ var mechanic = (function() {
         'UIAKey' : ['key'],
         'UIAKeyboard' : ['keyboard'],
         'UIALink' : ['link'],
+        'UIAMapView': ['mapView'],
         'UIAPageIndicator' : ['pageIndicator'],
         'UIAPicker' : ['picker'],
         'UIAPickerWheel' : ['pickerwheel'],
