@@ -1,10 +1,29 @@
-describe('Mechanic Event Module', function() {
+describe('Mechanic Logging Module', function() {
+    it('suppresses message and debug logs when isVerbose is false', function() {
+        spyOn(UIALogger, 'logError');
+        spyOn(UIALogger, 'logWarning');
+        spyOn(UIALogger, 'logDebug');
+        spyOn(UIALogger, 'logMessage');
+
+        $.isVerbose = false;
+        $.log('error', 'error');
+        $.log('warn', 'warn');
+        $.log('debug', 'debug');
+        $.log('message', 'message');
+
+        expect(UIALogger.logError).toHaveBeenCalledWith('error');
+        expect(UIALogger.logWarning).toHaveBeenCalledWith('warn');
+        expect(UIALogger.logDebug).not.toHaveBeenCalled();
+        expect(UIALogger.logMessage).not.toHaveBeenCalled();
+    });
+
     it('delegates to UIALogger when logging', function() {
         spyOn(UIALogger, 'logError');
         spyOn(UIALogger, 'logWarning');
         spyOn(UIALogger, 'logDebug');
         spyOn(UIALogger, 'logMessage');
 
+        $.isVerbose = true;
         $.error('error');
         $.warn('warn');
         $.debug('debug');
@@ -20,6 +39,7 @@ describe('Mechanic Event Module', function() {
         spyOn(UIALogger, 'logMessage');
         spyOn(UIALogger, 'logError');
 
+        $.isVerbose = true;
         $.log('hello!');
 
         expect(UIALogger.logMessage).toHaveBeenCalledWith('hello!');
@@ -30,6 +50,7 @@ describe('Mechanic Event Module', function() {
         spyOn(UIALogger, 'logMessage');
         spyOn(UIALogger, 'logError');
 
+        $.isVerbose = true;
         $.log('hello!', 'fakelevel');
 
         expect(UIALogger.logMessage).toHaveBeenCalledWith('hello!');
@@ -42,6 +63,7 @@ describe('Mechanic Event Module', function() {
         spyOn(UIALogger, 'logDebug');
         spyOn(UIALogger, 'logMessage');
 
+        $.isVerbose = true;
         $.log('error', 'error');
         $.log('warn', 'warn');
         $.log('debug', 'debug');
