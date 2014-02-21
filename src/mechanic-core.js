@@ -71,8 +71,12 @@ var mechanic = (function() {
         var key;
         var typeSelectorREString = "\\";
         for (key in typeShortcuts) {
-            typeSelectorREString += key + "|";
-            typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|"; });
+            // Instruments' javascript runtime (Xcode 5) automatically adds
+            // extra keys which are not in the shortcut list above, skip them
+            if (Array.isArray(typeShortcuts[key])) {
+                typeSelectorREString += key + "|";
+                typeShortcuts[key].forEach(function(shortcut) { typeSelectorREString += shortcut + "|"; });
+            }
         }
         return typeSelectorREString.substr(1, typeSelectorREString.length - 2);
     })();
