@@ -159,7 +159,7 @@ var mechanic = (function() {
                 val = el[attr]
             if (typeof val == 'function') val = val.apply(el)
             if (typeof val != 'undefined' && val == value)
-              matches.push(el)
+              matches.unshift(el)
             return matches
         })
     }
